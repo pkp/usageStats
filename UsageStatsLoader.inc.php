@@ -175,7 +175,7 @@ class UsageStatsLoader extends FileLoader {
 			if (!in_array($entryData['returnCode'], $sucessfulReturnCodes)) continue;
 
 			// Avoid bots.
-			if (Core::isUserAgentBot($entryData['userAgent'], $this->getCounterRobotListFile())) continue;
+			if (Core::isUserAgentBot($entryData['userAgent'], $this->getCounterRobotListFile(), true)) continue;
 
 			list($assocType, $contextPaths, $page, $op, $args) = $this->_getUrlMatches($entryData['url'], $filePath, $lineNumber);
 			if ($assocType && $contextPaths && $page && $op) {
