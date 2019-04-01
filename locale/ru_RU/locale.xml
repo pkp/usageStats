@@ -71,7 +71,7 @@
 	<message key="plugins.reports.usageStats.metricType">PKP/COUNTER</message>
 	<message key="plugins.reports.usageStats.metricType.full">Статистика Public Knowledge Project (готовая для COUNTER)</message>
 	<message key="plugins.generic.usageStats.statsSum">Сумма всех скачиваний файла</message>
-	<message key="plugins.generic.usageStats.noStats">Данные скачивания пока не доступны.</message>
+	<message key="plugins.generic.usageStats.noStats">Данные скачивания пока недоступны.</message>
 	<message key="plugins.generic.usageStats.monthInitials">Янв Фев Мар Апр Май Июн Июл Авг Сен Окт Ноя Дек</message>
 	<message key="plugins.generic.usageStats.downloads">Скачивания</message>
 	<!-- application specific locales -->
