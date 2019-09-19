@@ -82,4 +82,19 @@
 <Li>Browser</li>
 </Ul>
 <p> De indsamlede data bruges kun til evalueringsformål. Ingen IP-adresser er kortlagt til bruger-id'er. Det er teknisk umuligt at spore et bestemt sæt data til en bestemt IP-adresse. </P>]]></message>
+	<message key="plugins.generic.usageStats.settings.statsDisplayOptions.siteWide.omp">Hvert forlag kan tilsidesætte disse indstillinger fra forlagets plugin-side.</message>
+	<message key="plugins.generic.usageStats.optout.description.long.omp"><![CDATA[<h3>Generelle oplysninger om persondata</h3>
+<p>Se vores generelle<a href="{$privacyStatementUrl}">Erklæring om beskyttelse af personlige oplysninger</a>. </p>
+<h3>Brugsstatistikker</h3>
+<p>For at være i stand til at analysere brugen og effekten (impact) af vores publikationer, indsamler og logger vi tilgangen til hjemmesiden, kategorier, serier, bøger og filer. I processen anonymiseres alle data. Ingen personlige oplysninger logges. IP-adresser anonymiseres ved at blive hashet (ved hjælp af <em>SHA 256</em>) i kombination med en <em>secure 64 characters long salt</em>, der automatisk <em>tilfældigt genereres og overskrives dagligt</em>. Derfor kan IP-adresser ikke rekonstrueres. </p>
+<p>Følgende information indsamles ved siden af de anonymiserede IP-adresser: </p>
+<Ul>
+<li>Adgangstype (dvs. administrativ)</li>
+<li>Rekvireringstid</li>
+<li>Rekvireret URL</li>
+<li>HTTP-statuskode</li>
+<li>Browser</ li>
+</ Ul>
+<p> De indsamlede data bruges kun til evalueringsformål. Ingen IP-adresser er kortlagt til bruger-id'er. Det er teknisk umuligt at spore et specifikt datasæt til en bestemt IP-adresse. </p>
+]]></message>
 </locale>
