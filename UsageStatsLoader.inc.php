@@ -467,7 +467,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
-				$submissionDao = DAORegistry::getDAO('ArticleDAO');
+				$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 				$article = $submissionDao->getById($submissionId);
 				if (!$article) break;
 
@@ -590,7 +590,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
-				$submissionDao = DAORegistry::getDAO('ArticleDAO');
+				$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 				$article = $submissionDao->getById($submissionId);
 				if (!$article) break;
 
@@ -679,7 +679,7 @@ class UsageStatsLoader extends FileLoader {
 					ASSOC_TYPE_SUBMISSION_FILE => array(
 						'preprint/download'),
 					ASSOC_TYPE_ARTICLE => array(
-						'prerint/view')
+						'preprint/view')
 				);
 				$pageAndOp[Application::getContextAssocType()][] = 'index';
 				break;

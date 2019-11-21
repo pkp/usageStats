@@ -66,7 +66,6 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 			STATISTICS_DIMENSION_FILE_TYPE,
 			STATISTICS_DIMENSION_REPRESENTATION_ID,
 			STATISTICS_DIMENSION_SUBMISSION_ID,
-			STATISTICS_DIMENSION_ISSUE_ID,
 			STATISTICS_DIMENSION_CONTEXT_ID,
 			STATISTICS_DIMENSION_CITY,
 			STATISTICS_DIMENSION_REGION,
@@ -84,8 +83,6 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 		if ($metricType !== PPS_METRIC_TYPE_COUNTER) return array();
 		return array(
 			ASSOC_TYPE_JOURNAL,
-			ASSOC_TYPE_ISSUE,
-			ASSOC_TYPE_ISSUE_GALLEY,
 			ASSOC_TYPE_ARTICLE,
 			ASSOC_TYPE_SUBMISSION_FILE
 		);
@@ -106,7 +103,6 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 		// Article file downloads.
 		$columns = array(STATISTICS_DIMENSION_ASSOC_TYPE,
 			STATISTICS_DIMENSION_ASSOC_ID,
-			STATISTICS_DIMENSION_ISSUE_ID,
 			STATISTICS_DIMENSION_SUBMISSION_ID,
 			STATISTICS_DIMENSION_MONTH,
 			STATISTICS_DIMENSION_COUNTRY);
@@ -118,15 +114,6 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 		// Article abstract views.
 		$filter = array(STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION);
 		array_unshift($reports, array('nameLocaleKey' => 'manager.statistics.reports.defaultReport.articleAbstract',
-			'metricType' => $metricType, 'columns' => $columns, 'filter' => $filter,
-			'aggregationColumns' => $aggregationColumns));
-
-		// Issue main page views.
-		$columns = array(STATISTICS_DIMENSION_ASSOC_TYPE,
-			STATISTICS_DIMENSION_MONTH,
-			STATISTICS_DIMENSION_COUNTRY);
-		$filter = array(STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_ISSUE);
-		array_unshift($reports, array('nameLocaleKey' => 'manager.statistics.reports.defaultReport.issuePageViews',
 			'metricType' => $metricType, 'columns' => $columns, 'filter' => $filter,
 			'aggregationColumns' => $aggregationColumns));
 
