@@ -558,7 +558,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SERIES:
 				if (!isset($args[0])) break;
 				$seriesPath = $args[0];
-				$seriesDao = Application::getSeriesDAO(); /* @var $seriesDao SeriesDAO */
+				$seriesDao = Application::getSectionDAO(); /* @var $seriesDao SeriesDAO */
 				if (isset($this->_contextsByPath[current($contextPaths)])) {
 					$context =  $this->_contextsByPath[current($contextPaths)];
 					$series = $seriesDao->getByPath($seriesPath, $context->getId());
