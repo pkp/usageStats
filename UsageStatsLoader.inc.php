@@ -254,6 +254,9 @@ class UsageStatsLoader extends FileLoader {
 			case 'omp':
 				return OMP_METRIC_TYPE_COUNTER;
 				break;
+			case 'pps':
+				return PPS_METRIC_TYPE_COUNTER;
+				break;
 			default:
 				assert(false);
 		}
@@ -440,6 +443,9 @@ class UsageStatsLoader extends FileLoader {
 				case 'omp':
 					list($assocId, $assocTypeToReturn) = $this->getOMPAssoc($assocType, $contextPaths, $page, $op, $args);
 					break;
+				case 'pps':
+					list($assocId, $assocTypeToReturn) = $this->getPPSAssoc($assocType, $contextPaths, $page, $op, $args);
+					break;
 			}
 		}
 		return array($assocId, $assocTypeToReturn);
@@ -552,7 +558,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SERIES:
 				if (!isset($args[0])) break;
 				$seriesPath = $args[0];
-				$seriesDao = Application::getSectionDAO(); /* @var $seriesDao SeriesDAO */
+				$seriesDao = Application::getSeriesDAO(); /* @var $seriesDao SeriesDAO */
 				if (isset($this->_contextsByPath[current($contextPaths)])) {
 					$context =  $this->_contextsByPath[current($contextPaths)];
 					$series = $seriesDao->getByPath($seriesPath, $context->getId());
@@ -565,6 +571,47 @@ class UsageStatsLoader extends FileLoader {
 				break;
 		}
 
+		return array($assocId, $assocTypeToReturn);
+	}
+
+	/**
+	 * Get assoc type and id from the passed page, operation and
+	 * arguments specific to PPS.
+	 * @param $assocType ASSOC_TYPE_...
+	 * @param $contextPaths array
+	 * @param $page string
+	 * @param $op string
+	 * @param $args array
+	 * @return array (assocId, assocType)
+	 */
+	protected function getPPSAssoc($assocType, $contextPaths, $page, $op, $args) {
+		$assocId = $assocTypeToReturn = null;
+		switch ($assocType) {
+			case ASSOC_TYPE_SUBMISSION_FILE:
+				if (!isset($args[0])) break;
+				$submissionId = $args[0];
+				$submissionDao = DAORegistry::getDAO('ArticleDAO');
+				$article = $submissionDao->getById($submissionId);
+				if (!$article) break;
+
+				if (!isset($args[2])) break;
+				$fileId = $args[2];
+				$articleFileDao = DAORegistry::getDAO('SubmissionFileDAO');
+				$articleFile = $articleFileDao->getLatestRevision($fileId);
+				if (!$articleFile) break;
+
+				$assocId = $articleFile->getFileId();
+
+				// is the file article full text
+				$genreDao = DAORegistry::getDAO('GenreDAO');
+				$genre = $genreDao->getById($articleFile->getGenreId());
+				if ($genre->getCategory() != GENRE_CATEGORY_DOCUMENT || $genre->getSupplementary() || $genre->getDependent()) {
+					$assocTypeToReturn = ASSOC_TYPE_SUBMISSION_FILE_COUNTER_OTHER;
+				} else {
+					$assocTypeToReturn = $assocType;
+				}
+				break;
+		}
 		return array($assocId, $assocTypeToReturn);
 	}
 
@@ -626,6 +673,15 @@ class UsageStatsLoader extends FileLoader {
 						'catalog/series')
 				);
 				$pageAndOp[Application::getContextAssocType()][] = 'catalog/index';
+				break;
+			case 'pps':
+				$pageAndOp = $pageAndOp + array(
+					ASSOC_TYPE_SUBMISSION_FILE => array(
+						'preprint/download'),
+					ASSOC_TYPE_ARTICLE => array(
+						'prerint/view')
+				);
+				$pageAndOp[Application::getContextAssocType()][] = 'index';
 				break;
 		}
 		return $pageAndOp;

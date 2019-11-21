@@ -46,6 +46,9 @@ class UsageStatsPlugin extends GenericPlugin {
 			case 'omp':
 				import('plugins.generic.usageStats.OMPUsageStatsReportPlugin');
 				break;
+			case 'pps':
+				import('plugins.generic.usageStats.PPSUsageStatsReportPlugin');
+				break;
 		}
 	}
 
@@ -68,6 +71,9 @@ class UsageStatsPlugin extends GenericPlugin {
 			case 'omp':
 				$this->import('OMPUsageStatsReportPlugin');
 				return new OMPUsageStatsReportPlugin();
+			case 'pps':
+				$this->import('PPSUsageStatsReportPlugin');
+				return new PPSUsageStatsReportPlugin();
 			default:
 				assert(false);
 		}
@@ -139,6 +145,10 @@ class UsageStatsPlugin extends GenericPlugin {
 			case 'omp':
 				// Add chart to book view page
 				HookRegistry::register('Templates::Catalog::Book::Main', array($this, 'displayReaderMonographGraph'));
+				break;
+			case 'pps':
+			// Add chart to preprint view page
+			HookRegistry::register('Templates::Preprint::Main', array($this, 'displayReaderPreprintGraph'));
 				break;
 			default:
 				assert(false);
@@ -317,6 +327,9 @@ class UsageStatsPlugin extends GenericPlugin {
 				break;
 			case 'omp':
 				$hooks[] = 'HtmlMonographFilePlugin::monographDownloadFinished';
+				break;
+			case 'pps':
+				$hooks[] = 'HtmlArticleGalleyPlugin::articleDownloadFinished';
 				break;
 		}
 		return $hooks;
@@ -583,6 +596,48 @@ class UsageStatsPlugin extends GenericPlugin {
 
 				$this->addJavascriptData($this->getAllDownloadsStats($pubObjectId), $pubObjectType, $pubObjectId, 'frontend-catalog-book');
 				$this->loadJavascript('frontend-catalog-book' );
+		}
+		return false;
+	}
+
+	/**
+	 * Add chart to preprint view page
+	 *
+	 * Hooked to `Templates::Preprint::Main`
+	 * @param $hookName string
+	 * @param $params array [
+	 *  @option Smarty
+	 *  @option string HTML output to return
+	 * ]
+	 */
+	function displayReaderPreprintGraph($hookName, $params) {
+		$smarty =& $params[1];
+		$output =& $params[2];
+
+		$context = $smarty->getTemplateVars('currentContext');
+		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');
+		$contextDisplaySettingExists = $pluginSettingsDao->settingExists($context->getId(), $this->getName(), 'displayStatistics');
+		$contextDisplaySetting = $this->getSetting($context->getId(), 'displayStatistics');
+		$siteDisplaySetting = $this->getSetting(CONTEXT_ID_NONE, 'displayStatistics');
+		if (($contextDisplaySettingExists && $contextDisplaySetting) ||
+			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
+
+				$pubObject = $smarty->getTemplateVars('article');
+				assert(is_a($pubObject, 'PublishedArticle'));
+				$pubObjectId = $pubObject->getID();
+				$pubObjectType = 'PublishedArticle';
+
+				$output .= $this->getTemplate(
+					array(
+						'pubObjectType' => $pubObjectType,
+						'pubObjectId'   => $pubObjectId,
+					),
+					'outputFrontend.tpl',
+					$smarty
+				);
+
+				$this->addJavascriptData($this->getAllDownloadsStats($pubObjectId), $pubObjectType, $pubObjectId, 'frontend-article-view');
+				$this->loadJavascript('frontend-article-view' );
 		}
 		return false;
 	}
