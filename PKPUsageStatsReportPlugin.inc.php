@@ -67,8 +67,8 @@ abstract class PKPUsageStatsReportPlugin extends ReportPlugin {
 		$reportArgs = array(
 			'metricType' => $metricType,
 			'columns' => $columns,
-			'filters' => serialize(array(STATISTICS_DIMENSION_CONTEXT_ID => $context->getId())),
-			'orderBy' => serialize(array(STATISTICS_DIMENSION_MONTH => STATISTICS_ORDER_ASC))
+			'filters' => json_encode(array(STATISTICS_DIMENSION_CONTEXT_ID => $context->getId())),
+			'orderBy' => json_encode(array(STATISTICS_DIMENSION_MONTH => STATISTICS_ORDER_ASC))
 		);
 
 		Request::redirect(null, null, 'tools', 'generateReport', $reportArgs);
