@@ -15,7 +15,7 @@
 		return;
 	}
 
-	var graphs, noStatsNotice;
+	var graphs, noStatsNotice; 
 
 	// Check for .querySelectorAll in browser support
 	try {
