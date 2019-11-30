@@ -8,7 +8,7 @@
  * @brief Add HTML markup for a usage stats graph on the frontend
  *
  * @uses $pubObjectType The type of object this graph will respresent.
- *   Example: PublishedArticle
+ *   Example: Submission
  * @uses $pubObjectId The id of the object tihs graph will represent.
  *}
 
