@@ -678,7 +678,7 @@ class UsageStatsLoader extends FileLoader {
 				$pageAndOp = $pageAndOp + array(
 					ASSOC_TYPE_SUBMISSION_FILE => array(
 						'preprint/download'),
-					ASSOC_TYPE_ARTICLE => array(
+					ASSOC_TYPE_SUBMISSION => array(
 						'preprint/view')
 				);
 				$pageAndOp[Application::getContextAssocType()][] = 'index';

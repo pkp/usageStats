@@ -147,8 +147,8 @@ class UsageStatsPlugin extends GenericPlugin {
 				HookRegistry::register('Templates::Catalog::Book::Main', array($this, 'displayReaderMonographGraph'));
 				break;
 			case 'pps':
-			// Add chart to preprint view page
-			HookRegistry::register('Templates::Preprint::Main', array($this, 'displayReaderPreprintGraph'));
+				// Add chart to preprint view page
+				HookRegistry::register('Templates::Preprint::Main', array($this, 'displayReaderPreprintGraph'));
 				break;
 			default:
 				assert(false);
@@ -539,9 +539,9 @@ class UsageStatsPlugin extends GenericPlugin {
 			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
 
 				$pubObject = $smarty->getTemplateVars('article');
-				assert(is_a($pubObject, 'PublishedArticle'));
-				$pubObjectId = $pubObject->getID();
-				$pubObjectType = 'PublishedArticle';
+				assert(is_a($pubObject, 'Submission'));
+				$pubObjectId = $pubObject->getId();
+				$pubObjectType = 'Submission';
 
 				$output .= $this->getTemplate(
 					array(
@@ -622,10 +622,10 @@ class UsageStatsPlugin extends GenericPlugin {
 		if (($contextDisplaySettingExists && $contextDisplaySetting) ||
 			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
 
-				$pubObject = $smarty->getTemplateVars('article');
-				assert(is_a($pubObject, 'PublishedArticle'));
-				$pubObjectId = $pubObject->getID();
-				$pubObjectType = 'PublishedArticle';
+				$pubObject = $smarty->getTemplateVars('preprint');
+				assert(is_a($pubObject, 'Submission'));
+				$pubObjectId = $pubObject->getId();
+				$pubObjectType = 'Submission';
 
 				$output .= $this->getTemplate(
 					array(

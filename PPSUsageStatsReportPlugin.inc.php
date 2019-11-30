@@ -82,8 +82,8 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 	function getObjectTypes($metricType) {
 		if ($metricType !== PPS_METRIC_TYPE_COUNTER) return array();
 		return array(
-			ASSOC_TYPE_JOURNAL,
-			ASSOC_TYPE_ARTICLE,
+			Application::getContextAssocType(),
+			ASSOC_TYPE_SUBMISSION,
 			ASSOC_TYPE_SUBMISSION_FILE
 		);
 	}
