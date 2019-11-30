@@ -654,7 +654,7 @@ class UsageStatsLoader extends FileLoader {
 				$pageAndOp = $pageAndOp + array(
 					ASSOC_TYPE_SUBMISSION_FILE => array(
 						'article/download'),
-					ASSOC_TYPE_ARTICLE => array(
+					ASSOC_TYPE_SUBMISSION => array(
 						'article/view'),
 					ASSOC_TYPE_ISSUE => array(
 						'issue/view'),
