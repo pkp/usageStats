@@ -636,8 +636,8 @@ class UsageStatsPlugin extends GenericPlugin {
 					$smarty
 				);
 
-				$this->addJavascriptData($this->getAllDownloadsStats($pubObjectId), $pubObjectType, $pubObjectId, 'frontend-article-view');
-				$this->loadJavascript('frontend-article-view' );
+				$this->addJavascriptData($this->getAllDownloadsStats($pubObjectId), $pubObjectType, $pubObjectId, 'frontend-preprint-view');
+				$this->loadJavascript('frontend-preprint-view' );
 		}
 		return false;
 	}
