@@ -245,7 +245,7 @@ class UsageStatsLoader extends FileLoader {
 	 * Get metric type on which this loader process statistics.
 	 */
 	protected function getMetricType() {
-		$application = Application::getApplication();
+		$application = Application::get();
 		$applicationName = $application->getName();
 		switch ($applicationName) {
 			case 'ojs2':
@@ -321,7 +321,7 @@ class UsageStatsLoader extends FileLoader {
 		if ($file) $type = $this->getFileTypeFromFile($file);
 
 		if (!$type) {
-			$application = Application::getApplication();
+			$application = Application::get();
 			$applicationName = $application->getName();
 			switch ($applicationName) {
 				case 'ojs2':
@@ -434,7 +434,7 @@ class UsageStatsLoader extends FileLoader {
 		if (!$assocId) $assocTypeToReturn = null;
 
 		if (!$assocId && !$assocTypeToReturn) {
-			$application = Application::getApplication();
+			$application = Application::get();
 			$applicationName = $application->getName();
 			switch ($applicationName) {
 				case 'ojs2':
@@ -623,7 +623,7 @@ class UsageStatsLoader extends FileLoader {
 	 * @see Core::getContextPaths()
 	 */
 	protected function getContextByPath($contextPaths) {
-		$application = Application::getApplication();
+		$application = Application::get();
 		$deepestContextDepthIndex = $application->getContextDepth() - 1;
 		$contextPath = $contextPaths[$deepestContextDepthIndex];
 
@@ -647,7 +647,7 @@ class UsageStatsLoader extends FileLoader {
 				'index/index'
 			)
 		);
-		$application = Application::getApplication();
+		$application = Application::get();
 		$applicationName = $application->getName();
 		switch ($applicationName) {
 			case 'ojs2':

@@ -91,7 +91,7 @@ class UsageStatsSettingsForm extends Form {
 		if (!$this->getData('selectedOptionalColumns')) {
 			$this->setData('selectedOptionalColumns', array());
 		}
-		$application = Application::getApplication();
+		$application = Application::get();
 		$templateMgr->assign('applicationName', $application->getName());
 		return parent::fetch($request);
 	}

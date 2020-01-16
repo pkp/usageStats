@@ -37,7 +37,7 @@ class UsageStatsPlugin extends GenericPlugin {
 
 		// The upgrade and install processes will need access
 		// to constants defined in that report plugin.
-		$application = Application::getApplication();
+		$application = Application::get();
 		$applicationName = $application->getName();
 		switch ($applicationName) {
 			case 'ojs2':
@@ -62,7 +62,7 @@ class UsageStatsPlugin extends GenericPlugin {
 	 * @return UsageStatsReportPlugin
 	 */
 	function getReportPlugin() {
-		$application = Application::getApplication();
+		$application = Application::get();
 		$applicationName = $application->getName();
 		switch ($applicationName) {
 			case 'ojs2':
@@ -135,7 +135,7 @@ class UsageStatsPlugin extends GenericPlugin {
 	 * @return null
 	 */
 	function displayReaderStatistics() {
-		$application = Application::getApplication();
+		$application = Application::get();
 		$applicationName = $application->getName();
 		switch($applicationName) {
 			case 'ojs2':
@@ -319,7 +319,7 @@ class UsageStatsPlugin extends GenericPlugin {
 	 */
 	protected function getDownloadFinishedEventHooks() {
 		$hooks = array('FileManager::downloadFileFinished');
-		$application = Application::getApplication();
+		$application = Application::get();
 		$applicationName = $application->getName();
 		switch ($applicationName) {
 			case 'ojs2':
@@ -875,7 +875,7 @@ class UsageStatsPlugin extends GenericPlugin {
 		$orderBy = array(STATISTICS_DIMENSION_MONTH => STATISTICS_ORDER_ASC);
 		$reportPlugin = $this->getReportPlugin();
 
-		$application = Application::getApplication();
+		$application = Application::get();
 
 		$statsReports = $application->getMetrics(current($reportPlugin->getMetricTypes()), array(STATISTICS_DIMENSION_MONTH, STATISTICS_DIMENSION_REPRESENTATION_ID), $filter, $orderBy);
 		$cache->setEntireCache(array($pubObjectId => $statsReports));
