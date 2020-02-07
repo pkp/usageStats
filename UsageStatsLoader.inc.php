@@ -254,8 +254,8 @@ class UsageStatsLoader extends FileLoader {
 			case 'omp':
 				return OMP_METRIC_TYPE_COUNTER;
 				break;
-			case 'pps':
-				return PPS_METRIC_TYPE_COUNTER;
+			case 'ops':
+				return OPS_METRIC_TYPE_COUNTER;
 				break;
 			default:
 				assert(false);
@@ -443,8 +443,8 @@ class UsageStatsLoader extends FileLoader {
 				case 'omp':
 					list($assocId, $assocTypeToReturn) = $this->getOMPAssoc($assocType, $contextPaths, $page, $op, $args);
 					break;
-				case 'pps':
-					list($assocId, $assocTypeToReturn) = $this->getPPSAssoc($assocType, $contextPaths, $page, $op, $args);
+				case 'ops':
+					list($assocId, $assocTypeToReturn) = $this->getOPSAssoc($assocType, $contextPaths, $page, $op, $args);
 					break;
 			}
 		}
@@ -576,7 +576,7 @@ class UsageStatsLoader extends FileLoader {
 
 	/**
 	 * Get assoc type and id from the passed page, operation and
-	 * arguments specific to PPS.
+	 * arguments specific to OPS.
 	 * @param $assocType ASSOC_TYPE_...
 	 * @param $contextPaths array
 	 * @param $page string
@@ -584,7 +584,7 @@ class UsageStatsLoader extends FileLoader {
 	 * @param $args array
 	 * @return array (assocId, assocType)
 	 */
-	protected function getPPSAssoc($assocType, $contextPaths, $page, $op, $args) {
+	protected function getOPSAssoc($assocType, $contextPaths, $page, $op, $args) {
 		$assocId = $assocTypeToReturn = null;
 		switch ($assocType) {
 			case ASSOC_TYPE_SUBMISSION_FILE:
@@ -674,7 +674,7 @@ class UsageStatsLoader extends FileLoader {
 				);
 				$pageAndOp[Application::getContextAssocType()][] = 'catalog/index';
 				break;
-			case 'pps':
+			case 'ops':
 				$pageAndOp = $pageAndOp + array(
 					ASSOC_TYPE_SUBMISSION_FILE => array(
 						'preprint/download'),

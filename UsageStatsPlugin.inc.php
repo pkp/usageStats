@@ -46,8 +46,8 @@ class UsageStatsPlugin extends GenericPlugin {
 			case 'omp':
 				import('plugins.generic.usageStats.OMPUsageStatsReportPlugin');
 				break;
-			case 'pps':
-				import('plugins.generic.usageStats.PPSUsageStatsReportPlugin');
+			case 'ops':
+				import('plugins.generic.usageStats.OPSUsageStatsReportPlugin');
 				break;
 		}
 	}
@@ -71,9 +71,9 @@ class UsageStatsPlugin extends GenericPlugin {
 			case 'omp':
 				$this->import('OMPUsageStatsReportPlugin');
 				return new OMPUsageStatsReportPlugin();
-			case 'pps':
-				$this->import('PPSUsageStatsReportPlugin');
-				return new PPSUsageStatsReportPlugin();
+			case 'ops':
+				$this->import('OPSUsageStatsReportPlugin');
+				return new OPSUsageStatsReportPlugin();
 			default:
 				assert(false);
 		}
@@ -146,7 +146,7 @@ class UsageStatsPlugin extends GenericPlugin {
 				// Add chart to book view page
 				HookRegistry::register('Templates::Catalog::Book::Main', array($this, 'displayReaderMonographGraph'));
 				break;
-			case 'pps':
+			case 'ops':
 				// Add chart to preprint view page
 				HookRegistry::register('Templates::Preprint::Main', array($this, 'displayReaderPreprintGraph'));
 				break;
@@ -328,7 +328,7 @@ class UsageStatsPlugin extends GenericPlugin {
 			case 'omp':
 				$hooks[] = 'HtmlMonographFilePlugin::monographDownloadFinished';
 				break;
-			case 'pps':
+			case 'ops':
 				$hooks[] = 'HtmlArticleGalleyPlugin::articleDownloadFinished';
 				break;
 		}
