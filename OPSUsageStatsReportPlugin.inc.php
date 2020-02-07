@@ -1,24 +1,24 @@
 <?php
 
 /**
- * @file plugins/generic/usageStats/PPSUsageStatsReportPlugin.inc.php
+ * @file plugins/generic/usageStats/OPSUsageStatsReportPlugin.inc.php
  *
  * Copyright (c) 2013-2019 Simon Fraser University
  * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
- * @class OJUsageStatsReportPlugin
+ * @class OPSUsageStatsReportPlugin
  * @ingroup plugins_generic_usageStats
  *
- * @brief OJS default statistics report plugin (and metrics provider)
+ * @brief OPS default statistics report plugin (and metrics provider)
  */
 
 
 import('plugins.generic.usageStats.PKPUsageStatsReportPlugin');
 
-define('PPS_METRIC_TYPE_COUNTER', 'pps::counter');
+define('OPS_METRIC_TYPE_COUNTER', 'ops::counter');
 
-class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
+class OPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 
 	/**
 	 * @copydoc ReportPlugin::getMetrics()
@@ -27,7 +27,7 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 		// Validate the metric type.
 		if (!(is_scalar($metricType) || count($metricType) === 1)) return null;
 		if (is_array($metricType)) $metricType = array_pop($metricType);
-		if ($metricType !== PPS_METRIC_TYPE_COUNTER) return null;
+		if ($metricType !== OPS_METRIC_TYPE_COUNTER) return null;
 
 		return parent::getMetrics($metricType, $columns, $filters, $orderBy, $range);
 	}
@@ -36,14 +36,14 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 	 * @copydoc ReportPlugin::getMetricTypes()
 	 */
 	function getMetricTypes() {
-		return array(PPS_METRIC_TYPE_COUNTER);
+		return array(OPS_METRIC_TYPE_COUNTER);
 	}
 
 	/**
 	 * @copydoc ReportPlugin::getMetricDisplayType()
 	 */
 	function getMetricDisplayType($metricType) {
-		if ($metricType !== PPS_METRIC_TYPE_COUNTER) return null;
+		if ($metricType !== OPS_METRIC_TYPE_COUNTER) return null;
 		return parent::getMetricDisplayType($metricType);
 	}
 
@@ -51,7 +51,7 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 	 * @copydoc ReportPlugin::getMetricFullName()
 	 */
 	function getMetricFullName($metricType) {
-		if ($metricType !== PPS_METRIC_TYPE_COUNTER) return null;
+		if ($metricType !== OPS_METRIC_TYPE_COUNTER) return null;
 		return parent::getMetricDisplayType($metricType);
 	}
 
@@ -59,7 +59,7 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 	 * @copydoc ReportPlugin::getColumns()
 	 */
 	function getColumns($metricType) {
-		if ($metricType !== PPS_METRIC_TYPE_COUNTER) return array();
+		if ($metricType !== OPS_METRIC_TYPE_COUNTER) return array();
 		return array(
 			STATISTICS_DIMENSION_ASSOC_ID,
 			STATISTICS_DIMENSION_ASSOC_TYPE,
@@ -80,7 +80,7 @@ class PPSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 	 * @copydoc ReportPlugin::getObjectTypes()
 	 */
 	function getObjectTypes($metricType) {
-		if ($metricType !== PPS_METRIC_TYPE_COUNTER) return array();
+		if ($metricType !== OPS_METRIC_TYPE_COUNTER) return array();
 		return array(
 			Application::getContextAssocType(),
 			ASSOC_TYPE_SUBMISSION,
