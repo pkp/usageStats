@@ -414,7 +414,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SUBMISSION:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
-				$submissionDao = Application::getSubmissionDAO(); /* @var $submissionDao SubmissionDAO */
+				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
 				$submission = $submissionDao->getById($submissionId);
 				if ($submission) {
 					$assocId = $submission->getId();
@@ -467,7 +467,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
-				$submissionDao = DAORegistry::getDAO('SubmissionDAO');
+				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
 				$article = $submissionDao->getById($submissionId);
 				if (!$article) break;
 
@@ -537,7 +537,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
-				$submissionDao = Application::get()->getSubmissionDAO();
+				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
 				$monograph = $submissionDao->getById($submissionId);
 				if (!$monograph) break;
 
