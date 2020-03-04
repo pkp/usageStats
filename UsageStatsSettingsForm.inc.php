@@ -79,7 +79,7 @@ class UsageStatsSettingsForm extends Form {
 	 */
 	function fetch($request, $template = null, $display = false) {
 		$templateMgr = TemplateManager::getManager($request);
-		$saltFilepath = Config::getVar('usageStats', 'sal<F12>t_filepath');
+		$saltFilepath = Config::getVar('usageStats', 'salt_filepath');
 		$application = Application::get();
 		$templateMgr->assign(array(
 			'chartTypes' => array(
