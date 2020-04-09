@@ -580,10 +580,10 @@ class UsageStatsPlugin extends GenericPlugin {
 		if (($contextDisplaySettingExists && $contextDisplaySetting) ||
 			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
 
-				$pubObject = $smarty->getTemplateVars('publishedMonograph');
-				assert(is_a($pubObject, 'PublishedMonograph'));
-				$pubObjectId = $pubObject->getID();
-				$pubObjectType = 'PublishedMonograph';
+				$pubObject = $smarty->getTemplateVars('publication');
+				assert(is_a($pubObject, 'Publication'));
+				$pubObjectId = $pubObject->getId();
+				$pubObjectType = 'Publication';
 
 				$output .= $this->getTemplate(
 					array(
