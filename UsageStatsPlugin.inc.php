@@ -774,12 +774,21 @@ class UsageStatsPlugin extends GenericPlugin {
 	 * @return array
 	 */
 	function _getDownloadStats($pubObjectId) {
-		$cache = CacheManager::getManager()->getCache('downloadStats', $pubObjectId, array($this, '_downloadStatsCacheMiss'));
-		if (time() - $cache->getCacheTime() > 60 * 60 * 24) {
-			// Cache is older than one day, erase it.
-			$cache->flush();
+		$pool = new Stash\Pool(Core::getStashDriver());
+		$item = $pool->getItem('downloadStats-' . md5($pubObjectId));
+		if ($item->isMiss()) {
+			$reportPlugin = $this->getReportPlugin();
+			$application = Application::get();
+			$item->set($application->getMetrics(
+				current($reportPlugin->getMetricTypes()),
+				[STATISTICS_DIMENSION_MONTH, STATISTICS_DIMENSION_REPRESENTATION_ID],
+				[STATISTICS_DIMENSION_SUBMISSION_ID => $pubObjectId, STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION_FILE],
+				[STATISTICS_DIMENSION_MONTH => STATISTICS_ORDER_ASC]
+			));
+			$item->expiresAfter(60 * 60 * 24); // Valid for one day
+			$pool->save($item);
 		}
-		$statsReports = $cache->get($pubObjectId);
+		$statsReports = $item->get();
 
 		$currentYear = date("Y");
 		$months = range(1, 12);
@@ -860,27 +869,6 @@ class UsageStatsPlugin extends GenericPlugin {
 		}
 
 		return $allDownloadStats;
-	}
-
-	/**
-	 * Callback to fill cache with data, if empty.
-	 * @param $cache FileCache
-	 * @param $pubObjectId int
-	 * @return array
-	 */
-	function _downloadStatsCacheMiss($cache, $pubObjectId) {
-		$filter = array(
-				STATISTICS_DIMENSION_SUBMISSION_ID => $pubObjectId,
-				STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION_FILE
-		);
-		$orderBy = array(STATISTICS_DIMENSION_MONTH => STATISTICS_ORDER_ASC);
-		$reportPlugin = $this->getReportPlugin();
-
-		$application = Application::get();
-
-		$statsReports = $application->getMetrics(current($reportPlugin->getMetricTypes()), array(STATISTICS_DIMENSION_MONTH, STATISTICS_DIMENSION_REPRESENTATION_ID), $filter, $orderBy);
-		$cache->setEntireCache(array($pubObjectId => $statsReports));
-		return $statsReports;
 	}
 
 	/**
