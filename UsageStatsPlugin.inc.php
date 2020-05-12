@@ -192,10 +192,11 @@ class UsageStatsPlugin extends GenericPlugin {
 	}
 
 	/**
-	 * @copydoc Plugin::getInstallSchemaFile()
+	 * @copydoc Plugin::getInstallMigration()
 	 */
-	function getInstallSchemaFile() {
-		return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'schema.xml';
+	function getInstallMigration() {
+		$this->import('UsageStatsMigration');
+		return new UsageStatsMigration();
 	}
 
 	/**
