@@ -28,7 +28,7 @@ class UsageStatsMigration extends Migration {
 			$table->bigInteger('assoc_type');
 			$table->bigInteger('day');
 			$table->bigInteger('entry_time');
-			$table->bigInteger('metric')->default('1');
+			$table->bigInteger('metric')->default(1);
 			$table->string('country_id', 2)->nullable();
 			$table->string('region', 2)->nullable();
 			$table->string('city', 255)->nullable();
