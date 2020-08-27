@@ -33,7 +33,7 @@ class UsageStatsMigration extends Migration {
 			$table->string('region', 2)->nullable();
 			$table->string('city', 255)->nullable();
 			$table->string('load_id', 255);
-			$table->tinyInteger('file_type')->nullable();
+			$table->smallInteger('file_type')->nullable();
 		});
 	}
 }
