@@ -16,10 +16,10 @@
 
 class UsageStatsTemporaryRecordDAO extends DAO {
 
-	/** @var $_result ADORecordSet */
+	/** @var Enumerable|false */
 	var $_result;
 
-	/** @var $_loadId string */
+	/** @var string|null */
 	var $_loadId;
 
 	/**
@@ -51,7 +51,7 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 				(assoc_type, assoc_id, day, entry_time, country_id, region, city, file_type, load_id)
 				VALUES
 				(?, ?, ?, ?, ?, ?, ?, ?, ?)',
-			array(
+			[
 				(int) $assocType,
 				(int) $assocId,
 				$day,
@@ -61,7 +61,7 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 				$cityName,
 				(int) $fileType,
 				$loadId // Not number.
-			)
+			]
 		);
 
 		return true;
@@ -73,20 +73,15 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 	 * @return mixed array or false if the end of
 	 * records is reached.
 	 */
-	function &getNextByLoadId($loadId) {
-		$returner = false;
-
+	function getNextByLoadId($loadId) {
 		if (!$this->_result || $this->_loadId != $loadId) {
 			$this->_result = $this->_getGrouped($loadId);
 			$this->_loadId = $loadId;
 		}
 
 		$result = $this->_result;
-
-		if ($result->EOF) return $returner;
-		$returner = $result->GetRowAssoc(false);
-		$result->MoveNext();
-		return $returner;
+		if (!$this->_result || !($row = $this->_result->current())) return null;
+		return (array) $row;
 	}
 
 	/**
@@ -96,7 +91,10 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 	 * @return boolean
 	 */
 	function deleteByLoadId($loadId) {
-		return $this->update('DELETE from usage_stats_temporary_records WHERE load_id = ?', array($loadId)); // Not number.
+		return $this->update(
+			'DELETE from usage_stats_temporary_records WHERE load_id = ?',
+			[$loadId] // $loadId is not a number
+		);
 	}
 
 	/**
@@ -111,7 +109,8 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 	function deleteRecord($assocType, $assocId, $time, $loadId) {
 		return $this->update('DELETE from usage_stats_temporary_records
 			WHERE assoc_type = ? AND assoc_id = ? AND entry_time = ? AND load_id = ?',
-			array((int) $assocType, (int) $assocId, $time, $loadId)); // Not number.
+			[(int) $assocType, (int) $assocId, $time, $loadId] // $loadId is not a number
+		);
 	}
 
 
@@ -121,17 +120,15 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 	/**
 	* Get all temporary records with the passed load id grouped.
 	* @param $loadId string
-	* @return ADORecordSet
+	* @return Enumerable
 	*/
-	function &_getGrouped($loadId) {
-		$result = $this->retrieve(
+	function _getGrouped($loadId) {
+		return $this->retrieve(
 			'SELECT assoc_type, assoc_id, day, country_id, region, city, file_type, load_id, count(metric) as metric
 			FROM usage_stats_temporary_records WHERE load_id = ?
 			GROUP BY assoc_type, assoc_id, day, country_id, region, city, file_type, load_id',
-			array($loadId) // Not number.
+			[$loadId] // $loadId is not a number.
 		);
-
-		return $result;
 	}
 }
 
