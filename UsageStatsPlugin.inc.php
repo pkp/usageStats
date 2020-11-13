@@ -324,6 +324,7 @@ class UsageStatsPlugin extends GenericPlugin {
 		switch ($applicationName) {
 			case 'ojs2':
 				$hooks[] = 'HtmlArticleGalleyPlugin::articleDownloadFinished';
+				$hooks[] = 'LensGalleyPlugin::articleDownloadFinished';
 				break;
 			case 'omp':
 				$hooks[] = 'HtmlMonographFilePlugin::monographDownloadFinished';
