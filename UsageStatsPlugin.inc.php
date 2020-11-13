@@ -120,7 +120,7 @@ class UsageStatsPlugin extends GenericPlugin {
 				HookRegistry::register('UsageEventPlugin::getUsageEvent', array(&$this, 'logUsageEvent'));
 			}
 
-			$this->_registerTemplateResource(true);
+			$this->_registerTemplateResource(true, $mainContextId);
 
 			$this->displayReaderStatistics();
 		}
