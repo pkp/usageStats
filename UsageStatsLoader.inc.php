@@ -820,7 +820,9 @@ class UsageStatsLoader extends FileLoader {
 		$metricsDao = DAORegistry::getDAO('MetricsDAO'); /* @var $metricsDao PKPMetricsDAO */
 		$metricsDao->purgeLoadBatch($loadId);
 
-		while ($record = $statsDao->getNextByLoadId($loadId)) {
+		$records = $statsDao->getByLoadId($loadId);
+		foreach ($records as $record) {
+			$record = (array) $record;
 			$record['metric_type'] = $this->getMetricType();
 			$metricsDao->insertRecord($record);
 		}
