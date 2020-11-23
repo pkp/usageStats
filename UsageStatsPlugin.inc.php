@@ -314,37 +314,13 @@ class UsageStatsPlugin extends GenericPlugin {
 	}
 
 	/**
-	 * Get all hooks that define the
-	 * finished file download.
-	 * @return array
-	 */
-	protected function getDownloadFinishedEventHooks() {
-		$hooks = array('FileManager::downloadFileFinished');
-		$application = Application::get();
-		$applicationName = $application->getName();
-		switch ($applicationName) {
-			case 'ojs2':
-				$hooks[] = 'HtmlArticleGalleyPlugin::articleDownloadFinished';
-				$hooks[] = 'LensGalleyPlugin::articleDownloadFinished';
-				break;
-			case 'omp':
-				$hooks[] = 'HtmlMonographFilePlugin::monographDownloadFinished';
-				break;
-			case 'ops':
-				$hooks[] = 'HtmlArticleGalleyPlugin::articleDownloadFinished';
-				break;
-		}
-		return $hooks;
-	}
-
-	/**
 	 * Log the usage event into a file.
 	 * @param $hookName string
 	 * @param $args array [
 	 *  @option string hook name
 	 *  @option array usage event = compact(
 	 *		'time', 'pubObject', 'assocType', 'canonicalUrl', 'mimeType',
-	 *		'identifiers', 'docSize', 'downloadSuccess', 'serviceUri',
+	 *		'identifiers', 'docSize', 'serviceUri',
 	 *		'ip', 'host', 'user', 'roles', 'userAgent', 'referrer',
 	 *		'classification')
 	 * ]
@@ -356,21 +332,6 @@ class UsageStatsPlugin extends GenericPlugin {
 
 		// Check the statistics opt-out.
 		if ($this->_optedOut) return false;
-
-		if (in_array($hookName, $this->getDownloadFinishedEventHooks()) && !$usageEvent && $this->_currentUsageEvent) {
-			// File download is finished, try to log the current usage event.
-			$downloadSuccess = $args[2];
-			if ($downloadSuccess && !connection_aborted()) {
-				$this->_currentUsageEvent['downloadSuccess'] = true;
-				$usageEvent = $this->_currentUsageEvent;
-			}
-		}
-
-		if ($usageEvent && !$usageEvent['downloadSuccess']) {
-			// Don't log until we get the download finished hook call.
-			$this->_currentUsageEvent = $usageEvent;
-			return false;
-		}
 
 		if ($usageEvent) {
 			$this->_writeUsageEventInLogFile($usageEvent);
@@ -651,7 +612,7 @@ class UsageStatsPlugin extends GenericPlugin {
 	/**
 	 * @param $usageEvent array = compact(
 	 *		'time', 'pubObject', 'assocType', 'canonicalUrl', 'mimeType',
-	 *		'identifiers', 'docSize', 'downloadSuccess', 'serviceUri',
+	 *		'identifiers', 'docSize', 'serviceUri',
 	 *		'ip', 'host', 'user', 'roles', 'userAgent', 'referrer',
 	 *		'classification')
 	 */
