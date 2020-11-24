@@ -80,7 +80,8 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 		}
 
 		$result = $this->_result;
-		if (!$this->_result || !($row = $this->_result->current())) return null;
+		if (!$result || !($row = $this->_result->current())) return null;
+		$result->next();
 		return (array) $row;
 	}
 
