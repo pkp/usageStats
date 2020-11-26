@@ -539,21 +539,15 @@ class UsageStatsLoader extends FileLoader {
 		switch ($assocType) {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
-				$submissionId = $args[0];
-				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
-				$monograph = $submissionDao->getById($submissionId);
-				if (!$monograph) break;
+				$submission = Services::get('submission')->get($args[0]);
+				if (!$submission) break;
 
 				if (!isset($args[2])) break;
-				$fileIdAndRevision = $args[2];
-				list($fileId, $revision) = array_map(function($a) {
-					return (int) $a;
-				}, preg_split('/-/', $fileIdAndRevision));
-
-				$monographFileDao = DAORegistry::getDAO('SubmissionFileDAO'); /* @var $monographFileDao SubmissionFileDAO */
-				$monographFile = $monographFileDao->getRevision($fileId, $revision);
-				if ($monographFile) {
-					$assocId = $monographFile->getId();
+				$fileId = $args[2];
+				$file = Services::get('submissionFile')->get($fileId);
+				if (!$file) break;
+				if ($file) {
+					$assocId = $file->getId();
 				}
 
 				$assocTypeToReturn = $assocType;
@@ -820,7 +814,9 @@ class UsageStatsLoader extends FileLoader {
 		$metricsDao = DAORegistry::getDAO('MetricsDAO'); /* @var $metricsDao PKPMetricsDAO */
 		$metricsDao->purgeLoadBatch($loadId);
 
-		while ($record = $statsDao->getNextByLoadId($loadId)) {
+		$records = $statsDao->getByLoadId($loadId);
+		foreach ($records as $record) {
+			$record = (array) $record;
 			$record['metric_type'] = $this->getMetricType();
 			$metricsDao->insertRecord($record);
 		}
