@@ -69,20 +69,11 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 
 	/**
 	 * Get next temporary stats record by load id.
-	 * @param $loadId string
-	 * @return mixed array or false if the end of
-	 * records is reached.
+	 * @param string $loadId
+	 * @return Enumerable
 	 */
-	function getNextByLoadId($loadId) {
-		if (!$this->_result || $this->_loadId != $loadId) {
-			$this->_result = $this->_getGrouped($loadId);
-			$this->_loadId = $loadId;
-		}
-
-		$result = $this->_result;
-		if (!$result || !($row = $this->_result->current())) return null;
-		$result->next();
-		return (array) $row;
+	function getByLoadId($loadId) {
+		return $this->_getGrouped($loadId);
 	}
 
 	/**
