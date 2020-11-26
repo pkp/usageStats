@@ -57,6 +57,28 @@ class UsageStatsPlugin extends GenericPlugin {
 	// Public methods.
 	//
 	/**
+	 * Determine whether the plugin can be enabled.
+	 *
+	 * Can only be enabled or disabled at the site-wide level.
+	 *
+	 * @return boolean
+	 */
+	function getCanEnable() {
+		return !((bool) Application::get()->getRequest()->getContext());
+	}
+
+	/**
+	 * Determine whether the plugin can be disabled.
+	 *
+	 * Can only be enabled or disabled at the site-wide level.
+	 *
+	 * @return boolean
+	 */
+	function getCanDisable() {
+		return !((bool) Application::get()->getRequest()->getContext());
+	}
+
+	/**
 	 * Get the report plugin object that implements
 	 * the metric type details.
 	 * @return UsageStatsReportPlugin
@@ -203,14 +225,18 @@ class UsageStatsPlugin extends GenericPlugin {
 	 * @copydoc Plugin::manage()
 	 */
 	function manage($args, $request) {
-		$this->import('UsageStatsSettingsForm');
+		if ($request->getContext()) {
+			$this->import('UsageStatsSettingsForm');
+			$settingsForm = new UsageStatsSettingsForm($this);
+		} else {
+			$this->import('UsageStatsSiteSettingsForm');
+			$settingsForm = new UsageStatsSiteSettingsForm($this);
+		}
 		switch($request->getUserVar('verb')) {
 			case 'settings':
-				$settingsForm = new UsageStatsSettingsForm($this);
 				$settingsForm->initData();
 				return new JSONMessage(true, $settingsForm->fetch($request));
 			case 'save':
-				$settingsForm = new UsageStatsSettingsForm($this);
 				$settingsForm->readInputData();
 				if ($settingsForm->validate()) {
 					$settingsForm->execute();
