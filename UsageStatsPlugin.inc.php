@@ -370,7 +370,7 @@ class UsageStatsPlugin extends GenericPlugin {
 	 *  @option string hook name
 	 *  @option array usage event = compact(
 	 *		'time', 'pubObject', 'assocType', 'canonicalUrl', 'mimeType',
-	 *		'identifiers', 'docSize', 'downloadSuccess', 'serviceUri',
+	 *		'identifiers', 'downloadSuccess', 'serviceUri',
 	 *		'ip', 'host', 'user', 'roles', 'userAgent', 'referrer',
 	 *		'classification')
 	 * ]
@@ -677,7 +677,7 @@ class UsageStatsPlugin extends GenericPlugin {
 	/**
 	 * @param $usageEvent array = compact(
 	 *		'time', 'pubObject', 'assocType', 'canonicalUrl', 'mimeType',
-	 *		'identifiers', 'docSize', 'downloadSuccess', 'serviceUri',
+	 *		'identifiers', 'downloadSuccess', 'serviceUri',
 	 *		'ip', 'host', 'user', 'roles', 'userAgent', 'referrer',
 	 *		'classification')
 	 */
