@@ -71,7 +71,7 @@ abstract class PKPUsageStatsReportPlugin extends ReportPlugin {
 			'orderBy' => json_encode(array(STATISTICS_DIMENSION_MONTH => STATISTICS_ORDER_ASC))
 		);
 
-		$request->redirect(null, null, 'tools', 'generateReport', $reportArgs);
+		$request->redirect(null, null, 'reports', 'generateReport', $reportArgs);
 	}
 
 	/**
