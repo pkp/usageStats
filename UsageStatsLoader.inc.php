@@ -359,8 +359,8 @@ class UsageStatsLoader extends FileLoader {
 	 */
 	protected function getFileTypeFromFile($file) {
 		if (is_a($file, 'SubmissionFile')) {
-			$path = Services::get('file')->getPath($file->getData('fileId'));
-			$mimetype = Services::get('file')->fs->getMimetype($path);
+			$path = $file->getData('path');
+			$mimetype = $file->getData('mimetype');
 			$fileExtension = pathinfo($path, PATHINFO_EXTENSION);
 		} elseif (is_a($file, 'PKPFile')) {
 			$mimetype = $file->getFileType();
