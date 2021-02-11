@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-02-10 22:53+0000\n"
-"Last-Translator: Mirko Spiroski <mspiroski@id-press.eu>\n"
+"PO-Revision-Date: 2021-02-13 15:53+0000\n"
+"Last-Translator: Teodora Fildishevska <t.fildishevska@gmail.com>\n"
 "Language-Team: Macedonian <http://translate.pkp.sfu.ca/projects/plugins/"
 "usage-statistics-plugin/mk_MK/>\n"
 "Language: mk_MK\n"
@@ -13,3 +13,52 @@ msgstr ""
 
 msgid "plugins.generic.usageStats.settings.logging"
 msgstr "Опции за влез во лог"
+
+#, fuzzy
+msgid "plugins.generic.usageStats.settings.dataPrivacyOption.requirements"
+msgstr ""
+"To ensure data privacy, you must specify a file readable and writable by the "
+"web user to contain a randomly generated salt value.  This file must NOT be "
+"backed up to ensure privacy protection. The salt is randomly generated "
+"either using: the function mcrypt_create_iv, which requires the PHP mcrypt; "
+"the function openssl_random_pseudo_bytes, which requires the PHP openssl; "
+"the file /dev/urandom, which works only on *nix systems; or the function "
+"mt_rand, which is not cryptographically safe. Thus, if you are using a "
+"Windows server, please ensure that you install either the PHP mcrypt or "
+"openssl enabled in order to have the cryptographically safe generated salt."
+
+#, fuzzy
+msgid "plugins.generic.usageStats.settings.dataPrivacyOption.saltFilepath.invalid"
+msgstr "The salt file is not writable."
+
+#, fuzzy
+msgid "plugins.generic.usageStats.settings.dataPrivacyOption.saltFilepath"
+msgstr "File path for the anonymizing salt"
+
+msgid "plugins.generic.usageStats.settings.dataPrivacyOption"
+msgstr "Опција за приватност на податоци"
+
+msgid "plugins.generic.usageStats.settings.saved"
+msgstr "Поставките на плагинот за статистика на користење се зачувани"
+
+msgid "plugins.generic.usageStats.settings.logParseRegex.description"
+msgstr ""
+"Стандардно користениот regex може да ги парсира лог датотеките за пристап до "
+"apache во комбиниран формат како и лог датотеките на плагинот. Доколку "
+"вашите лог датотеки за пристап се во различен формат, ќе мора да вметнете "
+"regex способен да ги парсира и да ги даде очекуваните вредности. Погледнете "
+"UsageStatsLoader::_getDataFromLogEntry() за повеќе информации."
+
+msgid "plugins.generic.usageStats.settings.logParseRegex"
+msgstr "Парсирај regex за датотеки на лог"
+
+msgid "plugins.generic.usageStats.settings.createLogFiles.description"
+msgstr ""
+"Активирањето на оваа опција ќе го примора плагинот да креира датотеки за "
+"влез во лог во директориумот со датотеки. Тие датотеки треба да се користат "
+"за извлекување на податоците за статистика на употреба. Доколку не сакате да "
+"креирате повеќе датотеки за влез во лог можете да ја оставите оваа опција "
+"оневозможена и да ги користите вашите датотеки за влез во лог на серверот."
+
+msgid "plugins.generic.usageStats.settings.createLogFiles"
+msgstr "Создадете датотеки на лог"
