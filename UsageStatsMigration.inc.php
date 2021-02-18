@@ -26,6 +26,7 @@ class UsageStatsMigration extends Migration {
 		Capsule::schema()->create('usage_stats_temporary_records', function (Blueprint $table) {
 			$table->bigInteger('assoc_id');
 			$table->bigInteger('assoc_type');
+			$table->bigInteger('representation_id')->nullable()->default(NULL);
 			$table->bigInteger('day');
 			$table->bigInteger('entry_time');
 			$table->bigInteger('metric')->default(1);
