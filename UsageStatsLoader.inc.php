@@ -431,8 +431,9 @@ class UsageStatsLoader extends FileLoader {
 				$submissionExists = $submissionDao->exists($submissionId);
 				if ($submissionExists) {
 					if ($publicationId) {
-						$publication = Services::get('publication')->get($publicationId);
-						if (!$publication) break;
+						$publicationDao = DAORegistry::getDAO('PublicationDAO'); /* @var $publicationDao PublicationDAO */
+						$publicationExists = $publicationDao->exists($publicationId, $submissionId);
+						if (!$publicationExists) break;
 					}
 					$assocId = $submissionId;
 					$assocTypeToReturn = $assocType;
