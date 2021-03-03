@@ -171,7 +171,7 @@ class UsageStatsLoader extends FileLoader {
 
 			list($assocType, $contextPaths, $page, $op, $args) = $this->_getUrlMatches($entryData['url'], $filePath, $lineNumber);
 			if ($assocType && $contextPaths && $page && $op) {
-				list($assocId, $assocType) = $this->getAssoc($assocType, $contextPaths, $page, $op, $args);
+				list($assocId, $assocType, $representationId) = $this->getAssoc($assocType, $contextPaths, $page, $op, $args);
 			} else {
 				$assocId = $assocType = null;
 			}
@@ -221,7 +221,7 @@ class UsageStatsLoader extends FileLoader {
 			}
 
 			$lastInsertedEntries[$entryHash] = $entryData['date'];
-			$statsDao->insert($assocType, $assocId, $day, $entryData['date'], $countryCode, $region, $cityName, $type, $loadId);
+			$statsDao->insert($assocType, $assocId, $representationId, $day, $entryData['date'], $countryCode, $region, $cityName, $type, $loadId);
 		}
 
 		fclose($fhandle);
@@ -410,18 +410,32 @@ class UsageStatsLoader extends FileLoader {
 	 * @param $page string
 	 * @param $op string
 	 * @param $args array
-	 * @return array (assocId, assocType)
+	 * @return array (assocId, assocType, representationId)
 	 */
 	protected function getAssoc($assocType, $contextPaths, $page, $op, $args) {
-		$assocId = $assocTypeToReturn = null;
+		$assocId = $assocTypeToReturn = $representationId = null;
 		switch ($assocType) {
 			case ASSOC_TYPE_SUBMISSION:
+				$publicationId = null;
 				if (!isset($args[0])) break;
+				// If the operation is 'view' and the arguments count > 1
+				// the arguments must be: $submissionId/version/$publicationId.
+				// Else, it is not considered hier, as submission abstract count.
+				if ($op == 'view' && count($args) > 1) {
+					if ($args[1] !== 'version') break;
+					else if (count($args) != 3) break;
+					$publicationId = (int) $args[2];
+				}
 				$submissionId = $args[0];
 				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
-				$submission = $submissionDao->getById($submissionId);
-				if ($submission) {
-					$assocId = $submission->getId();
+				$submissionExists = $submissionDao->exists($submissionId);
+				if ($submissionExists) {
+					if ($publicationId) {
+						$publicationDao = DAORegistry::getDAO('PublicationDAO'); /* @var $publicationDao PublicationDAO */
+						$publicationExists = $publicationDao->exists($publicationId, $submissionId);
+						if (!$publicationExists) break;
+					}
+					$assocId = $submissionId;
 					$assocTypeToReturn = $assocType;
 				}
 				break;
@@ -442,17 +456,17 @@ class UsageStatsLoader extends FileLoader {
 			$applicationName = $application->getName();
 			switch ($applicationName) {
 				case 'ojs2':
-					list($assocId, $assocTypeToReturn) = $this->getOJSAssoc($assocType, $contextPaths, $page, $op, $args);
+					list($assocId, $assocTypeToReturn, $representationId) = $this->getOJSAssoc($assocType, $contextPaths, $page, $op, $args);
 					break;
 				case 'omp':
-					list($assocId, $assocTypeToReturn) = $this->getOMPAssoc($assocType, $contextPaths, $page, $op, $args);
+					list($assocId, $assocTypeToReturn, $representationId) = $this->getOMPAssoc($assocType, $contextPaths, $page, $op, $args);
 					break;
 				case 'ops':
-					list($assocId, $assocTypeToReturn) = $this->getOPSAssoc($assocType, $contextPaths, $page, $op, $args);
+					list($assocId, $assocTypeToReturn, $representationId) = $this->getOPSAssoc($assocType, $contextPaths, $page, $op, $args);
 					break;
 			}
 		}
-		return array($assocId, $assocTypeToReturn);
+		return array($assocId, $assocTypeToReturn, $representationId);
 	}
 
 	/**
@@ -463,17 +477,20 @@ class UsageStatsLoader extends FileLoader {
 	 * @param $page string
 	 * @param $op string
 	 * @param $args array
-	 * @return array (assocId, assocType)
+	 * @return array (assocId, assocType, representationId)
 	 */
 	protected function getOJSAssoc($assocType, $contextPaths, $page, $op, $args) {
-		$assocId = $assocTypeToReturn = null;
+		$assocId = $assocTypeToReturn = $representationId = null;
 		switch ($assocType) {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
 				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
-				$article = $submissionDao->getById($submissionId);
-				if (!$article) break;
+				$submissionExists = $submissionDao->exists($submissionId);
+				if (!$submissionExists) break;
+
+				if (!isset($args[1])) break;
+				$representationId = $args[1];
 
 				if (!isset($args[2])) break;
 				$fileId = $args[2];
@@ -523,7 +540,7 @@ class UsageStatsLoader extends FileLoader {
 				}
 				break;
 		}
-		return array($assocId, $assocTypeToReturn);
+		return array($assocId, $assocTypeToReturn, $representationId);
 	}
 
 	/**
@@ -532,15 +549,20 @@ class UsageStatsLoader extends FileLoader {
 	* @param $page string
 	* @param $op string
 	* @param $args array
-	* @return array (assocId, assocType)
+	* @return array (assocId, assocType, representationId)
 	*/
 	protected function getOMPAssoc($assocType, $contextPaths, $page, $op, $args) {
-		$assocId = $assocTypeToReturn = null;
+		$assocId = $assocTypeToReturn = $representationId = null;
 		switch ($assocType) {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
-				$submission = Services::get('submission')->get($args[0]);
-				if (!$submission) break;
+				$submissionId = $args[0];
+				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
+				$submissionExists = $submissionDao->exists($submissionId);
+				if (!$submissionExists) break;
+
+				if (!isset($args[1])) break;
+				$representationId = $args[1];
 
 				if (!isset($args[2])) break;
 				$fileId = $args[2];
@@ -568,7 +590,7 @@ class UsageStatsLoader extends FileLoader {
 				break;
 		}
 
-		return array($assocId, $assocTypeToReturn);
+		return array($assocId, $assocTypeToReturn, $representationId);
 	}
 
 	/**
@@ -579,17 +601,20 @@ class UsageStatsLoader extends FileLoader {
 	 * @param $page string
 	 * @param $op string
 	 * @param $args array
-	 * @return array (assocId, assocType)
+	 * @return array (assocId, assocType, representationId)
 	 */
 	protected function getOPSAssoc($assocType, $contextPaths, $page, $op, $args) {
-		$assocId = $assocTypeToReturn = null;
+		$assocId = $assocTypeToReturn = $representationId = null;
 		switch ($assocType) {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
-				$submissionDao = DAORegistry::getDAO('SubmissionDAO');
-				$article = $submissionDao->getById($submissionId);
-				if (!$article) break;
+				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
+				$submissionExists = $submissionDao->exists($submissionId);
+				if (!$submissionExists) break;
+
+				if (!isset($args[1])) break;
+				$representationId = $args[1];
 
 				if (!isset($args[2])) break;
 				$fileId = $args[2];
@@ -608,7 +633,7 @@ class UsageStatsLoader extends FileLoader {
 				}
 				break;
 		}
-		return array($assocId, $assocTypeToReturn);
+		return array($assocId, $assocTypeToReturn, $representationId);
 	}
 
 	/**

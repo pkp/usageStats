@@ -36,6 +36,7 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 	 * Add the passed usage statistic record.
 	 * @param $assocType int
 	 * @param $assocId int
+	 * @param $representationId int
 	 * @param $day string
 	 * @param $time int
 	 * @param $countryCode string
@@ -45,15 +46,16 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 	 * @param $loadId string
 	 * @return boolean
 	 */
-	function insert($assocType, $assocId, $day, $time, $countryCode, $region, $cityName, $fileType, $loadId) {
+	function insert($assocType, $assocId, $representationId, $day, $time, $countryCode, $region, $cityName, $fileType, $loadId) {
 		$this->update(
 			'INSERT INTO usage_stats_temporary_records
-				(assoc_type, assoc_id, day, entry_time, country_id, region, city, file_type, load_id)
+				(assoc_type, assoc_id, representation_id, day, entry_time, country_id, region, city, file_type, load_id)
 				VALUES
-				(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+				(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 			[
 				(int) $assocType,
 				(int) $assocId,
+				isset($representationId) ? (int) $representationId : NULL,
 				$day,
 				(int) $time,
 				$countryCode,
@@ -116,9 +118,9 @@ class UsageStatsTemporaryRecordDAO extends DAO {
 	*/
 	function _getGrouped($loadId) {
 		return $this->retrieve(
-			'SELECT assoc_type, assoc_id, day, country_id, region, city, file_type, load_id, count(metric) as metric
+			'SELECT assoc_type, assoc_id, representation_id, day, country_id, region, city, file_type, load_id, count(metric) as metric
 			FROM usage_stats_temporary_records WHERE load_id = ?
-			GROUP BY assoc_type, assoc_id, day, country_id, region, city, file_type, load_id',
+			GROUP BY assoc_type, assoc_id, representation_id, day, country_id, region, city, file_type, load_id',
 			[$loadId] // $loadId is not a number.
 		);
 	}
