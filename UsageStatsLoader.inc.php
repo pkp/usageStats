@@ -416,11 +416,25 @@ class UsageStatsLoader extends FileLoader {
 		$assocId = $assocTypeToReturn = null;
 		switch ($assocType) {
 			case ASSOC_TYPE_SUBMISSION:
+				$publicationId = null;
 				if (!isset($args[0])) break;
+				// If the operation is 'view' and the arguments count > 1
+				// the arguments must be: $submissionId/version/$publicationId.
+				// Else, it is not considered hier, as submission abstract count.
+				if ($op == 'view' && count($args) > 1) {
+					if ($args[1] !== 'version') break;
+					else if (count($args) != 3) break;
+					$publicationId = (int) $args[2];
+				}
 				$submissionId = $args[0];
 				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
 				$submission = $submissionDao->getById($submissionId);
 				if ($submission) {
+					if ($publicationId) {
+						$publicationDao = DAORegistry::getDAO('PublicationDAO'); /* @var $publicationDao PublicationDAO */
+						$publicationExists = $publicationDao->exists($publicationId, $submissionId);
+						if (!$publicationExists) break;
+					}
 					$assocId = $submission->getId();
 					$assocTypeToReturn = $assocType;
 				}
