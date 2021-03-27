@@ -225,7 +225,8 @@ class UsageStatsPlugin extends GenericPlugin {
 	 * @copydoc Plugin::manage()
 	 */
 	function manage($args, $request) {
-		if ($request->getContext()) {
+		$singleContextSite = (Services::get('context')->getCount() == 1);
+		if ($request->getContext() && !$singleContextSite) {
 			$this->import('UsageStatsSettingsForm');
 			$settingsForm = new UsageStatsSettingsForm($this);
 		} else {
