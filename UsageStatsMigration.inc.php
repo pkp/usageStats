@@ -14,7 +14,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Support\Facades\Schema;
 
 class UsageStatsMigration extends Migration {
         /**
@@ -23,7 +23,7 @@ class UsageStatsMigration extends Migration {
          */
         public function up() {
 		// Usage stats temporary records
-		Capsule::schema()->create('usage_stats_temporary_records', function (Blueprint $table) {
+		Schema::create('usage_stats_temporary_records', function (Blueprint $table) {
 			$table->bigInteger('assoc_id');
 			$table->bigInteger('assoc_type');
 			$table->bigInteger('representation_id')->nullable()->default(NULL);
