@@ -12,7 +12,7 @@
 		{translate key="plugins.generic.usageStats.optout.title"}
 	</h2>
 	<div class="content">
-		{capture assign=privacyInfoUrl}{url router=$smarty.const.ROUTE_PAGE page="usageStats" op="privacyInformation"}{/capture}
+		{capture assign=privacyInfoUrl}{url router=PKPApplication::ROUTE_PAGE page="usageStats" op="privacyInformation"}{/capture}
 		<p>{translate key="plugins.generic.usageStats.optout.shortDesc" privacyInfo=$privacyInfoUrl}</p>
 	</div>
 </div>
