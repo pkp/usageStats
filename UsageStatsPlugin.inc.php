@@ -15,6 +15,8 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 
+use \PKP\core\JSONMessage;
+
 class UsageStatsPlugin extends GenericPlugin {
 
 	/** @var $_currentUsageEvent array */
