@@ -15,7 +15,8 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 
-use \PKP\core\JSONMessage;
+use PKP\core\JSONMessage;
+use PKP\file\PrivateFileManager;
 
 class UsageStatsPlugin extends GenericPlugin {
 
@@ -433,7 +434,6 @@ class UsageStatsPlugin extends GenericPlugin {
 	 * @return string
 	 */
 	function getFilesPath() {
-		import('lib.pkp.classes.file.PrivateFileManager');
 		$fileMgr = new PrivateFileManager();
 
 		return realpath($fileMgr->getBasePath()) . DIRECTORY_SEPARATOR . 'usageStats';
@@ -748,7 +748,6 @@ class UsageStatsPlugin extends GenericPlugin {
 
 		$usageLogEntry = implode(' ', $desiredParams) . PHP_EOL;
 
-		import('lib.pkp.classes.file.PrivateFileManager');
 		$fileMgr = new PrivateFileManager();
 
 		// Get the current day filename.
