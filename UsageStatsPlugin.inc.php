@@ -13,10 +13,15 @@
  * @brief Provide usage statistics to data objects.
  */
 
-import('lib.pkp.classes.plugins.GenericPlugin');
-
+use PKP\plugins\GenericPlugin;
 use PKP\core\JSONMessage;
 use PKP\file\PrivateFileManager;
+use PKP\linkAction\request\AjaxModal;
+use PKP\linkAction\LinkAction;
+use PKP\notification\PKPNotification;
+
+use APP\submission\Submission;
+use APP\notification\NotificationManager;
 
 class UsageStatsPlugin extends GenericPlugin {
 
@@ -247,7 +252,7 @@ class UsageStatsPlugin extends GenericPlugin {
 					$notificationManager = new NotificationManager();
 					$notificationManager->createTrivialNotification(
 						$request->getUser()->getId(),
-						NOTIFICATION_TYPE_SUCCESS,
+						PKPNotification::NOTIFICATION_TYPE_SUCCESS,
 						array('contents' => __('plugins.generic.usageStats.settings.saved'))
 					);
 					return new JSONMessage(true);
@@ -266,7 +271,6 @@ class UsageStatsPlugin extends GenericPlugin {
 	 */
 	function getActions($request, $verb) {
 		$router = $request->getRouter();
-		import('lib.pkp.classes.linkAction.request.AjaxModal');
 		return array_merge(
 			$this->getEnabled()?array(
 				new LinkAction(
@@ -570,7 +574,7 @@ class UsageStatsPlugin extends GenericPlugin {
 			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
 
 				$pubObject = $smarty->getTemplateVars('article');
-				assert(is_a($pubObject, 'Submission'));
+				assert($pubObject instanceof Submission);
 				$pubObjectId = $pubObject->getId();
 				$pubObjectType = 'Submission';
 
@@ -612,7 +616,7 @@ class UsageStatsPlugin extends GenericPlugin {
 			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
 
 				$pubObject = $smarty->getTemplateVars('publishedSubmission');
-				assert(is_a($pubObject, 'Submission'));
+				assert($pubObject instanceof Submission);
 				$pubObjectId = $pubObject->getId();
 				$pubObjectType = 'Submission';
 
@@ -654,7 +658,7 @@ class UsageStatsPlugin extends GenericPlugin {
 			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
 
 				$pubObject = $smarty->getTemplateVars('preprint');
-				assert(is_a($pubObject, 'Submission'));
+				assert($pubObject instanceof Submission);
 				$pubObjectId = $pubObject->getId();
 				$pubObjectType = 'Submission';
 
