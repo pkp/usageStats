@@ -13,6 +13,9 @@
  * @brief OJS default statistics report plugin (and metrics provider)
  */
 
+use PKP\statistics\PKPStatisticsHelper;
+
+use APP\statistics\StatisticsHelper;
 
 import('plugins.generic.usageStats.PKPUsageStatsReportPlugin');
 
@@ -61,19 +64,19 @@ class OJSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 	function getColumns($metricType) {
 		if ($metricType !== OJS_METRIC_TYPE_COUNTER) return array();
 		return array(
-			STATISTICS_DIMENSION_ASSOC_ID,
-			STATISTICS_DIMENSION_ASSOC_TYPE,
-			STATISTICS_DIMENSION_FILE_TYPE,
-			STATISTICS_DIMENSION_REPRESENTATION_ID,
-			STATISTICS_DIMENSION_SUBMISSION_ID,
-			STATISTICS_DIMENSION_ISSUE_ID,
-			STATISTICS_DIMENSION_CONTEXT_ID,
-			STATISTICS_DIMENSION_CITY,
-			STATISTICS_DIMENSION_REGION,
-			STATISTICS_DIMENSION_COUNTRY,
-			STATISTICS_DIMENSION_DAY,
-			STATISTICS_DIMENSION_MONTH,
-			STATISTICS_METRIC
+			PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_ID,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_TYPE,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_FILE_TYPE,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_REPRESENTATION_ID,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_SUBMISSION_ID,
+			StatisticsHelper::STATISTICS_DIMENSION_ISSUE_ID,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_CONTEXT_ID,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_CITY,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_REGION,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_COUNTRY,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_DAY,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH,
+			PKPStatisticsHelper::STATISTICS_METRIC
 		);
 	}
 
@@ -104,28 +107,28 @@ class OJSUsageStatsReportPlugin extends PKPUsageStatsReportPlugin {
 		$aggregationColumns = $this->getAggregationColumns();
 
 		// Article file downloads.
-		$columns = array(STATISTICS_DIMENSION_ASSOC_TYPE,
-			STATISTICS_DIMENSION_ASSOC_ID,
-			STATISTICS_DIMENSION_ISSUE_ID,
-			STATISTICS_DIMENSION_SUBMISSION_ID,
-			STATISTICS_DIMENSION_MONTH,
-			STATISTICS_DIMENSION_COUNTRY);
-		$filter = array(STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION_FILE);
+		$columns = array(PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_TYPE,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_ID,
+			StatisticsHelper::STATISTICS_DIMENSION_ISSUE_ID,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_SUBMISSION_ID,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_COUNTRY);
+		$filter = array(PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION_FILE);
 		array_unshift($reports, array('nameLocaleKey' => 'manager.statistics.reports.defaultReport.articleDownloads',
 			'metricType' => $metricType, 'columns' => $columns, 'filter' => $filter,
 			'aggregationColumns' => $aggregationColumns));
 
 		// Article abstract views.
-		$filter = array(STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION);
+		$filter = array(PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION);
 		array_unshift($reports, array('nameLocaleKey' => 'manager.statistics.reports.defaultReport.articleAbstract',
 			'metricType' => $metricType, 'columns' => $columns, 'filter' => $filter,
 			'aggregationColumns' => $aggregationColumns));
 
 		// Issue main page views.
-		$columns = array(STATISTICS_DIMENSION_ASSOC_TYPE,
-			STATISTICS_DIMENSION_MONTH,
-			STATISTICS_DIMENSION_COUNTRY);
-		$filter = array(STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_ISSUE);
+		$columns = array(PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_TYPE,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_COUNTRY);
+		$filter = array(PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_ISSUE);
 		array_unshift($reports, array('nameLocaleKey' => 'manager.statistics.reports.defaultReport.issuePageViews',
 			'metricType' => $metricType, 'columns' => $columns, 'filter' => $filter,
 			'aggregationColumns' => $aggregationColumns));

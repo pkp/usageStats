@@ -16,6 +16,8 @@
 /** GeoIp tool for geo location based on ip */
 include('lib' . DIRECTORY_SEPARATOR . 'geoIp' . DIRECTORY_SEPARATOR . 'geoipcity.inc');
 
+use PKP\statistics\PKPStatisticsHelper;
+
 class GeoLocationTool {
 
 	var $_geoLocationTool;
@@ -94,7 +96,7 @@ class GeoLocationTool {
 
 		// Overwrite the first empty record with the code to
 		// unknow country.
-		$countryCodes[0] = STATISTICS_UNKNOWN_COUNTRY_ID;
+		$countryCodes[0] = PKPStatisticsHelper::STATISTICS_UNKNOWN_COUNTRY_ID;
 		return $countryCodes;
 	}
 

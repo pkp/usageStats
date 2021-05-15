@@ -16,6 +16,7 @@
 use PKP\form\Form;
 use PKP\form\validation\FormValidator;
 use PKP\notification\PKPNotification;
+use PKP\statistics\PKPStatisticsHelper;
 
 use APP\notification\NotificationManager;
 
@@ -33,8 +34,8 @@ class UsageStatsSiteSettingsForm extends Form {
 
 		parent::__construct($plugin->getTemplateResource('usageStatsSiteSettingsForm.tpl'));
 		$this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'dataPrivacyOption', FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.usageStats.settings.dataPrivacyOption.requiresSalt', array(&$this, '_dependentFormFieldIsSet'), array(&$this, 'saltFilepath')));
-		$this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'dataPrivacyOption', FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.usageStats.settings.dataPrivacyOption.excludesRegion', array(&$this, '_dependentFormFieldIsSet'), array(&$this, 'selectedOptionalColumns', STATISTICS_DIMENSION_REGION), true));
-		$this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'dataPrivacyOption', FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.usageStats.settings.dataPrivacyOption.excludesCity', array(&$this, '_dependentFormFieldIsSet'), array(&$this, 'selectedOptionalColumns', STATISTICS_DIMENSION_CITY), true));
+		$this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'dataPrivacyOption', FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.usageStats.settings.dataPrivacyOption.excludesRegion', array(&$this, '_dependentFormFieldIsSet'), array(&$this, 'selectedOptionalColumns', PKPStatisticsHelper::STATISTICS_DIMENSION_REGION), true));
+		$this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'dataPrivacyOption', FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.usageStats.settings.dataPrivacyOption.excludesCity', array(&$this, '_dependentFormFieldIsSet'), array(&$this, 'selectedOptionalColumns', PKPStatisticsHelper::STATISTICS_DIMENSION_CITY), true));
 		$this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'saltFilepath', FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.usageStats.settings.dataPrivacyOption.saltFilepath.invalid', array(&$plugin, 'validateSaltpath')));
 		$this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
 		$this->addCheck(new \PKP\form\validation\FormValidatorCSRF($this));
@@ -122,14 +123,14 @@ class UsageStatsSiteSettingsForm extends Form {
 
 		$optionalColumns = $this->getData('optionalColumns');
 		// Make sure optional columns data makes sense.
-		if ($optionalColumns && in_array(STATISTICS_DIMENSION_CITY, $optionalColumns) && !in_array(STATISTICS_DIMENSION_REGION, $optionalColumns)) {
+		if ($optionalColumns && in_array(PKPStatisticsHelper::STATISTICS_DIMENSION_CITY, $optionalColumns) && !in_array(PKPStatisticsHelper::STATISTICS_DIMENSION_REGION, $optionalColumns)) {
 			$user = $request->getUser();
 			$notificationManager = new NotificationManager();
 			$notificationManager->createTrivialNotification(
 				$user->getId(), PKPNotification::NOTIFICATION_TYPE_WARNING, array('contents' => __('plugins.generic.usageStats.settings.optionalColumns.cityRequiresRegion'))
 			);
-			$optionalColumns[] = STATISTICS_DIMENSION_REGION;
-			$optionalColumns[] = STATISTICS_DIMENSION_REGION;
+			$optionalColumns[] = PKPStatisticsHelper::STATISTICS_DIMENSION_REGION;
+			$optionalColumns[] = PKPStatisticsHelper::STATISTICS_DIMENSION_REGION;
 		}
 		$plugin->updateSetting(CONTEXT_ID_NONE, 'optionalColumns', $optionalColumns);
 

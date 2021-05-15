@@ -13,8 +13,8 @@
  * @brief OJS default statistics report plugin (and metrics provider)
  */
 
-
-import('lib.pkp.classes.plugins.ReportPlugin');
+use PKP\statistics\PKPStatisticsHelper;
+use PKP\plugins\ReportPlugin;
 
 abstract class PKPUsageStatsReportPlugin extends ReportPlugin {
 
@@ -61,14 +61,14 @@ abstract class PKPUsageStatsReportPlugin extends ReportPlugin {
 		$statsHelper = new StatisticsHelper();
 		$columnNames = $statsHelper->getColumnNames();
 		// Make sure we aggregate by month instead of day.
-		unset($columnNames[STATISTICS_DIMENSION_DAY]);
+		unset($columnNames[PKPStatisticsHelper::STATISTICS_DIMENSION_DAY]);
 		$columns = array_keys($columnNames);
 
 		$reportArgs = array(
 			'metricType' => $metricType,
 			'columns' => $columns,
-			'filters' => json_encode(array(STATISTICS_DIMENSION_CONTEXT_ID => $context->getId())),
-			'orderBy' => json_encode(array(STATISTICS_DIMENSION_MONTH => STATISTICS_ORDER_ASC))
+			'filters' => json_encode(array(PKPStatisticsHelper::STATISTICS_DIMENSION_CONTEXT_ID => $context->getId())),
+			'orderBy' => json_encode(array(PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH => PKPStatisticsHelper::STATISTICS_ORDER_ASC))
 		);
 
 		$request->redirect(null, null, 'reports', 'generateReport', $reportArgs);
@@ -109,12 +109,12 @@ abstract class PKPUsageStatsReportPlugin extends ReportPlugin {
 		if (!$this->isMetricTypeValid($metricTypes)) return $reports;
 
 		// Context index page views.
-		$columns = array(STATISTICS_DIMENSION_ASSOC_TYPE,
-			STATISTICS_DIMENSION_CONTEXT_ID,
-			STATISTICS_DIMENSION_MONTH,
-			STATISTICS_DIMENSION_COUNTRY);
+		$columns = array(PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_TYPE,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_CONTEXT_ID,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_COUNTRY);
 
-		$filter = array(STATISTICS_DIMENSION_ASSOC_TYPE => Application::getContextAssocType());
+		$filter = array(PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_TYPE => Application::getContextAssocType());
 
 		// We allow the subclasses to define the name locale key.
 		$reports[] = array('nameLocaleKey' => '',
@@ -131,8 +131,8 @@ abstract class PKPUsageStatsReportPlugin extends ReportPlugin {
 	function getOptionalColumns($metricType) {
 		if (!$this->isMetricTypeValid($metricType)) return array();
 		return array(
-			STATISTICS_DIMENSION_CITY,
-			STATISTICS_DIMENSION_REGION
+			PKPStatisticsHelper::STATISTICS_DIMENSION_CITY,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_REGION
 		);
 	}
 
@@ -147,11 +147,11 @@ abstract class PKPUsageStatsReportPlugin extends ReportPlugin {
 	 * @return array
 	 */
 	protected function getAggregationColumns() {
-		return array(STATISTICS_DIMENSION_COUNTRY,
-			STATISTICS_DIMENSION_REGION,
-			STATISTICS_DIMENSION_CITY,
-			STATISTICS_DIMENSION_MONTH,
-			STATISTICS_DIMENSION_DAY);
+		return array(PKPStatisticsHelper::STATISTICS_DIMENSION_COUNTRY,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_REGION,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_CITY,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH,
+			PKPStatisticsHelper::STATISTICS_DIMENSION_DAY);
 	}
 
 	/**

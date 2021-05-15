@@ -13,7 +13,9 @@
  * @brief Scheduled task to extract transform and load usage statistics data into database.
  */
 
-import('lib.pkp.classes.task.FileLoader');
+use PKP\scheduledTask\ScheduledTaskHelper;
+use PKP\statistics\PKPStatisticsHelper;
+use PKP\task\FileLoader;
 
 /** These are rules defined by the COUNTER project.
  * See https://www.projectcounter.org/code-of-practice-sections/data-processing/#returncodesandtimefilters */
@@ -108,7 +110,7 @@ class UsageStatsLoader extends FileLoader {
 	protected function executeActions() {
 		$plugin = $this->_plugin;
 		if (!$plugin->getEnabled()) {
-			$this->addExecutionLogEntry(__('plugins.generic.usageStats.pluginNotEnabled'), SCHEDULED_TASK_MESSAGE_TYPE_WARNING);
+			$this->addExecutionLogEntry(__('plugins.generic.usageStats.pluginNotEnabled'), ScheduledTaskHelper::SCHEDULED_TASK_MESSAGE_TYPE_WARNING);
 			return false;
 		}
 
@@ -119,7 +121,7 @@ class UsageStatsLoader extends FileLoader {
 		$processingDirFiles = glob($this->getProcessingPath() . DIRECTORY_SEPARATOR . '*');
 		$processingDirError = is_array($processingDirFiles) && count($processingDirFiles);
 		if ($processingDirError) {
-			$this->addExecutionLogEntry(__('plugins.generic.usageStats.processingPathNotEmpty', array('directory' => $this->getProcessingPath())), SCHEDULED_TASK_MESSAGE_TYPE_ERROR);
+			$this->addExecutionLogEntry(__('plugins.generic.usageStats.processingPathNotEmpty', array('directory' => $this->getProcessingPath())), ScheduledTaskHelper::SCHEDULED_TASK_MESSAGE_TYPE_ERROR);
 		}
 
 		if ($this->_autoStage) $this->autoStage();
@@ -184,8 +186,8 @@ class UsageStatsLoader extends FileLoader {
 				list($countryCode, $cityName, $region) = $geoTool ? $geoTool->getGeoLocation($entryData['ip']) : array(null, null, null);
 				// Check optional columns setting.
 				$optionalColumns = $plugin->getSetting(CONTEXT_ID_NONE, 'optionalColumns');
-				if (!in_array(STATISTICS_DIMENSION_CITY, $optionalColumns)) $cityName = null;
-				if (!in_array(STATISTICS_DIMENSION_REGION, $optionalColumns)) $cityName = $region = null;
+				if (!in_array(PKPStatisticsHelper::STATISTICS_DIMENSION_CITY, $optionalColumns)) $cityName = null;
+				if (!in_array(PKPStatisticsHelper::STATISTICS_DIMENSION_REGION, $optionalColumns)) $cityName = $region = null;
 			}
 			$day = date('Ymd', $entryData['date']);
 
@@ -206,7 +208,7 @@ class UsageStatsLoader extends FileLoader {
 			// Time between requests check.
 			if (isset($lastInsertedEntries[$entryHash])) {
 				// Decide what time filter to use, depending on object type.
-				if ($type == STATISTICS_FILE_TYPE_PDF || $type == STATISTICS_FILE_TYPE_OTHER) {
+				if ($type == PKPStatisticsHelper::STATISTICS_FILE_TYPE_PDF || $type == PKPStatisticsHelper::STATISTICS_FILE_TYPE_OTHER) {
 					$timeFilter = COUNTER_DOUBLE_CLICK_TIME_FILTER_SECONDS_OTHER;
 				} else {
 					$timeFilter = COUNTER_DOUBLE_CLICK_TIME_FILTER_SECONDS_HTML;
@@ -230,7 +232,7 @@ class UsageStatsLoader extends FileLoader {
 
 		if (!$loadResult) {
 			$this->addExecutionLogEntry(__('plugins.generic.usageStats.loadDataError',
-				array('file' => $filePath)), SCHEDULED_TASK_MESSAGE_TYPE_ERROR);
+				array('file' => $filePath)), ScheduledTaskHelper::SCHEDULED_TASK_MESSAGE_TYPE_ERROR);
 			return FILE_LOADER_RETURN_TO_STAGING;
 		} else {
 			return true;
@@ -373,30 +375,30 @@ class UsageStatsLoader extends FileLoader {
 			case 'application/x-pdf':
 			case 'text/pdf':
 			case 'text/x-pdf':
-				$type = STATISTICS_FILE_TYPE_PDF;
+				$type = PKPStatisticsHelper::STATISTICS_FILE_TYPE_PDF;
 				break;
 			case 'application/octet-stream':
 				if ($fileExtension == 'pdf') {
-					$type = STATISTICS_FILE_TYPE_PDF;
+					$type = PKPStatisticsHelper::STATISTICS_FILE_TYPE_PDF;
 				} else {
-					$type = STATISTICS_FILE_TYPE_OTHER;
+					$type = PKPStatisticsHelper::STATISTICS_FILE_TYPE_OTHER;
 				}
 				break;
 			case 'application/msword':
-				$type = STATISTICS_FILE_TYPE_DOC;
+				$type = PKPStatisticsHelper::STATISTICS_FILE_TYPE_DOC;
 				break;
 			case 'application/zip':
 				if ($fileExtension == 'docx') {
-					$type = STATISTICS_FILE_TYPE_DOC;
+					$type = PKPStatisticsHelper::STATISTICS_FILE_TYPE_DOC;
 				} else {
-					$type = STATISTICS_FILE_TYPE_OTHER;
+					$type = PKPStatisticsHelper::STATISTICS_FILE_TYPE_OTHER;
 				}
 				break;
 			case 'text/html':
-				$type = STATISTICS_FILE_TYPE_HTML;
+				$type = PKPStatisticsHelper::STATISTICS_FILE_TYPE_HTML;
 				break;
 			default:
-				$type = STATISTICS_FILE_TYPE_OTHER;
+				$type = PKPStatisticsHelper::STATISTICS_FILE_TYPE_OTHER;
 		}
 
 		return $type;
@@ -794,7 +796,7 @@ class UsageStatsLoader extends FileLoader {
 		} else {
 			// Could not remove the base url, can't go on.
 			$this->addExecutionLogEntry( __('plugins.generic.usageStats.removeUrlError',
-				array('file' => $filePath, 'lineNumber' => $lineNumber)), SCHEDULED_TASK_MESSAGE_TYPE_WARNING);
+				array('file' => $filePath, 'lineNumber' => $lineNumber)), ScheduledTaskHelper::SCHEDULED_TASK_MESSAGE_TYPE_WARNING);
 			return $noMatchesReturner;
 		}
 

@@ -19,6 +19,7 @@ use PKP\file\PrivateFileManager;
 use PKP\linkAction\request\AjaxModal;
 use PKP\linkAction\LinkAction;
 use PKP\notification\PKPNotification;
+use PKP\statistics\PKPStatisticsHelper;
 
 use APP\submission\Submission;
 use APP\notification\NotificationManager;
@@ -819,14 +820,14 @@ class UsageStatsPlugin extends GenericPlugin {
 		$statsByFormat = $statsByMonth = $years = array();
 		$totalDownloads = 0;
 		foreach ($statsReports as $statsReport) {
-			$month = (int) substr($statsReport[STATISTICS_DIMENSION_MONTH], -2);
-			$year = (int) substr($statsReport[STATISTICS_DIMENSION_MONTH], 0, 4);
-			$metric = $statsReport[STATISTICS_METRIC];
+			$month = (int) substr($statsReport[PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH], -2);
+			$year = (int) substr($statsReport[PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH], 0, 4);
+			$metric = $statsReport[PKPStatisticsHelper::STATISTICS_METRIC];
 
 			// Keep track of the years, avoiding duplicates.
 			$years[$year] = null;
 
-			$representationId = $statsReport[STATISTICS_DIMENSION_REPRESENTATION_ID];
+			$representationId = $statsReport[PKPStatisticsHelper::STATISTICS_DIMENSION_REPRESENTATION_ID];
 
 			// Prepare the stats aggregating by Representation.
 			// Create entries for all months, so all representations will have the same entries count.
@@ -903,15 +904,15 @@ class UsageStatsPlugin extends GenericPlugin {
 	 */
 	function _downloadStatsCacheMiss($cache, $pubObjectId) {
 		$filter = array(
-				STATISTICS_DIMENSION_SUBMISSION_ID => $pubObjectId,
-				STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION_FILE
+				PKPStatisticsHelper::STATISTICS_DIMENSION_SUBMISSION_ID => $pubObjectId,
+				PKPStatisticsHelper::STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION_FILE
 		);
-		$orderBy = array(STATISTICS_DIMENSION_MONTH => STATISTICS_ORDER_ASC);
+		$orderBy = array(PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH => PKPStatisticsHelper::STATISTICS_ORDER_ASC);
 		$reportPlugin = $this->getReportPlugin();
 
 		$application = Application::get();
 
-		$statsReports = $application->getMetrics(current($reportPlugin->getMetricTypes()), array(STATISTICS_DIMENSION_MONTH, STATISTICS_DIMENSION_REPRESENTATION_ID), $filter, $orderBy);
+		$statsReports = $application->getMetrics(current($reportPlugin->getMetricTypes()), array(PKPStatisticsHelper::STATISTICS_DIMENSION_MONTH, PKPStatisticsHelper::STATISTICS_DIMENSION_REPRESENTATION_ID), $filter, $orderBy);
 		$cache->setEntireCache(array($pubObjectId => $statsReports));
 		return $statsReports;
 	}
