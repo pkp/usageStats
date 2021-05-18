@@ -233,7 +233,7 @@ class UsageStatsLoader extends FileLoader {
 		if (!$loadResult) {
 			$this->addExecutionLogEntry(__('plugins.generic.usageStats.loadDataError',
 				array('file' => $filePath)), ScheduledTaskHelper::SCHEDULED_TASK_MESSAGE_TYPE_ERROR);
-			return FILE_LOADER_RETURN_TO_STAGING;
+			return FileLoader::FILE_LOADER_RETURN_TO_STAGING;
 		} else {
 			return true;
 		}
