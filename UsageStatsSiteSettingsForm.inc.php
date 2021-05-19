@@ -17,6 +17,7 @@ use PKP\form\Form;
 use PKP\form\validation\FormValidator;
 use PKP\notification\PKPNotification;
 use PKP\statistics\PKPStatisticsHelper;
+use PKP\core\PKPApplication;
 
 use APP\notification\NotificationManager;
 
@@ -47,12 +48,12 @@ class UsageStatsSiteSettingsForm extends Form {
 	function initData() {
 		$plugin = $this->plugin;
 
-		$this->setData('createLogFiles', $plugin->getSetting(CONTEXT_ID_NONE, 'createLogFiles'));
-		$this->setData('accessLogFileParseRegex', $plugin->getSetting(CONTEXT_ID_NONE, 'accessLogFileParseRegex'));
-		$this->setData('dataPrivacyOption', $plugin->getSetting(CONTEXT_ID_NONE, 'dataPrivacyOption'));
+		$this->setData('createLogFiles', $plugin->getSetting(PKPApplication::CONTEXT_ID_NONE, 'createLogFiles'));
+		$this->setData('accessLogFileParseRegex', $plugin->getSetting(PKPApplication::CONTEXT_ID_NONE, 'accessLogFileParseRegex'));
+		$this->setData('dataPrivacyOption', $plugin->getSetting(PKPApplication::CONTEXT_ID_NONE, 'dataPrivacyOption'));
 		$this->setData('saltFilepath', $plugin->getSaltPath());
-		$this->setData('selectedOptionalColumns', $plugin->getSetting(CONTEXT_ID_NONE, 'optionalColumns'));
-		$this->setData('compressArchives', $plugin->getSetting(CONTEXT_ID_NONE, 'compressArchives'));
+		$this->setData('selectedOptionalColumns', $plugin->getSetting(PKPApplication::CONTEXT_ID_NONE, 'optionalColumns'));
+		$this->setData('compressArchives', $plugin->getSetting(PKPApplication::CONTEXT_ID_NONE, 'compressArchives'));
 
 		$request = Application::get()->getRequest();
 		$context = $request->getContext();
@@ -108,15 +109,15 @@ class UsageStatsSiteSettingsForm extends Form {
 	function execute(...$functionArgs) {
 		$plugin = $this->plugin;
 
-		$plugin->updateSetting(CONTEXT_ID_NONE, 'createLogFiles', $this->getData('createLogFiles'), 'bool');
-		$plugin->updateSetting(CONTEXT_ID_NONE, 'accessLogFileParseRegex', $this->getData('accessLogFileParseRegex'));
-		$plugin->updateSetting(CONTEXT_ID_NONE, 'dataPrivacyOption', $this->getData('dataPrivacyOption'), 'bool');
-		$plugin->updateSetting(CONTEXT_ID_NONE, 'compressArchives', $this->getData('compressArchives'), 'bool');
-		$plugin->updateSetting(CONTEXT_ID_NONE, 'saltFilepath', $this->getData('saltFilepath'));
+		$plugin->updateSetting(PKPApplication::CONTEXT_ID_NONE, 'createLogFiles', $this->getData('createLogFiles'), 'bool');
+		$plugin->updateSetting(PKPApplication::CONTEXT_ID_NONE, 'accessLogFileParseRegex', $this->getData('accessLogFileParseRegex'));
+		$plugin->updateSetting(PKPApplication::CONTEXT_ID_NONE, 'dataPrivacyOption', $this->getData('dataPrivacyOption'), 'bool');
+		$plugin->updateSetting(PKPApplication::CONTEXT_ID_NONE, 'compressArchives', $this->getData('compressArchives'), 'bool');
+		$plugin->updateSetting(PKPApplication::CONTEXT_ID_NONE, 'saltFilepath', $this->getData('saltFilepath'));
 
 		$request = Application::get()->getRequest();
 		$context = $request->getContext();
-		$contextId = $context ? $context->getId() : CONTEXT_ID_NONE;
+		$contextId = $context ? $context->getId() : PKPApplication::CONTEXT_ID_NONE;
 		$plugin->updateSetting($contextId, 'displayStatistics', $this->getData('displayStatistics'), 'bool');
 		$plugin->updateSetting($contextId, 'chartType', $this->getData('chartType'));
 		$plugin->updateSetting($contextId, 'datasetMaxCount', $this->getData('datasetMaxCount'));
@@ -132,7 +133,7 @@ class UsageStatsSiteSettingsForm extends Form {
 			$optionalColumns[] = PKPStatisticsHelper::STATISTICS_DIMENSION_REGION;
 			$optionalColumns[] = PKPStatisticsHelper::STATISTICS_DIMENSION_REGION;
 		}
-		$plugin->updateSetting(CONTEXT_ID_NONE, 'optionalColumns', $optionalColumns);
+		$plugin->updateSetting(PKPApplication::CONTEXT_ID_NONE, 'optionalColumns', $optionalColumns);
 
 		parent::execute(...$functionArgs);
 	}

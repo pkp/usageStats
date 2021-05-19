@@ -20,9 +20,13 @@ use PKP\linkAction\request\AjaxModal;
 use PKP\linkAction\LinkAction;
 use PKP\notification\PKPNotification;
 use PKP\statistics\PKPStatisticsHelper;
+use PKP\core\PKPApplication;
+use PKP\plugins\HookRegistry;
+use PKP\plugins\PluginRegistry;
 
 use APP\submission\Submission;
 use APP\notification\NotificationManager;
+use APP\core\Application;
 
 class UsageStatsPlugin extends GenericPlugin {
 
@@ -124,8 +128,8 @@ class UsageStatsPlugin extends GenericPlugin {
 
 		if ($this->getEnabled($mainContextId) && $success) {
 
-			$this->_dataPrivacyOn = $this->getSetting(CONTEXT_ID_NONE, 'dataPrivacyOption');
-			$this->_saltpath = $this->getSetting(CONTEXT_ID_NONE, 'saltFilepath');
+			$this->_dataPrivacyOn = $this->getSetting(PKPApplication::CONTEXT_ID_NONE, 'dataPrivacyOption');
+			$this->_saltpath = $this->getSetting(PKPApplication::CONTEXT_ID_NONE, 'saltFilepath');
 			// Check config for backward compatibility.
 			if (!$this->_saltpath) $this->_saltpath = Config::getVar('usageStats', 'salt_filepath');
 			$request = Application::get()->getRequest();
@@ -147,7 +151,7 @@ class UsageStatsPlugin extends GenericPlugin {
 
 			// If the plugin will provide the access logs,
 			// register to the usage event hook provider.
-			if ($this->getSetting(CONTEXT_ID_NONE, 'createLogFiles')) {
+			if ($this->getSetting(PKPApplication::CONTEXT_ID_NONE, 'createLogFiles')) {
 				HookRegistry::register('UsageEventPlugin::getUsageEvent', array(&$this, 'logUsageEvent'));
 			}
 
@@ -570,7 +574,7 @@ class UsageStatsPlugin extends GenericPlugin {
 		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');
 		$contextDisplaySettingExists = $pluginSettingsDao->settingExists($context->getId(), $this->getName(), 'displayStatistics');
 		$contextDisplaySetting = $this->getSetting($context->getId(), 'displayStatistics');
-		$siteDisplaySetting = $this->getSetting(CONTEXT_ID_NONE, 'displayStatistics');
+		$siteDisplaySetting = $this->getSetting(PKPApplication::CONTEXT_ID_NONE, 'displayStatistics');
 		if (($contextDisplaySettingExists && $contextDisplaySetting) ||
 			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
 
@@ -612,7 +616,7 @@ class UsageStatsPlugin extends GenericPlugin {
 		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');
 		$contextDisplaySettingExists = $pluginSettingsDao->settingExists($context->getId(), $this->getName(), 'displayStatistics');
 		$contextDisplaySetting = $this->getSetting($context->getId(), 'displayStatistics');
-		$siteDisplaySetting = $this->getSetting(CONTEXT_ID_NONE, 'displayStatistics');
+		$siteDisplaySetting = $this->getSetting(PKPApplication::CONTEXT_ID_NONE, 'displayStatistics');
 		if (($contextDisplaySettingExists && $contextDisplaySetting) ||
 			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
 
@@ -654,7 +658,7 @@ class UsageStatsPlugin extends GenericPlugin {
 		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');
 		$contextDisplaySettingExists = $pluginSettingsDao->settingExists($context->getId(), $this->getName(), 'displayStatistics');
 		$contextDisplaySetting = $this->getSetting($context->getId(), 'displayStatistics');
-		$siteDisplaySetting = $this->getSetting(CONTEXT_ID_NONE, 'displayStatistics');
+		$siteDisplaySetting = $this->getSetting(PKPApplication::CONTEXT_ID_NONE, 'displayStatistics');
 		if (($contextDisplaySettingExists && $contextDisplaySetting) ||
 			(!$contextDisplaySettingExists && $siteDisplaySetting)) {
 
@@ -940,7 +944,7 @@ class UsageStatsPlugin extends GenericPlugin {
 		if ($context && $pluginSettingsDao->settingExists($context->getId(), $this->getName(), $name)) {
 			return $this->getSetting($context->getId(), $name);
 		} else {
-			return $this->getSetting(CONTEXT_ID_NONE, $name);
+			return $this->getSetting(PKPApplication::CONTEXT_ID_NONE, $name);
 		}
 	}
 

@@ -80,7 +80,7 @@ class UsageStatsSettingsForm extends Form {
 
 		$request = Application::get()->getRequest();
 		$context = $request->getContext();
-		$contextId = $context ? $context->getId() : CONTEXT_ID_NONE;
+		$contextId = $context ? $context->getId() : \PKP\core\PKPApplication::CONTEXT_ID_NONE;
 		$plugin->updateSetting($contextId, 'displayStatistics', $this->getData('displayStatistics'), 'bool');
 		$plugin->updateSetting($contextId, 'chartType', $this->getData('chartType'));
 		$plugin->updateSetting($contextId, 'datasetMaxCount', $this->getData('datasetMaxCount'));

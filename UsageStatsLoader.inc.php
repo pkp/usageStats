@@ -47,7 +47,7 @@ class UsageStatsLoader extends FileLoader {
 		$plugin = PluginRegistry::getPlugin('generic', 'usagestatsplugin'); /* @var $plugin UsageStatsPlugin */
 		$this->_plugin = $plugin;
 
-		if ($plugin->getSetting(CONTEXT_ID_NONE, 'compressArchives')) {
+		if ($plugin->getSetting(\PKP\core\PKPApplication::CONTEXT_ID_NONE, 'compressArchives')) {
 			$this->setCompressArchives(true);
 		}
 
@@ -182,10 +182,10 @@ class UsageStatsLoader extends FileLoader {
 
 			$countryCode = $cityName = $region = null;
 			$plugin = $this->_plugin;
-			if (!$plugin->getSetting(CONTEXT_ID_NONE, 'dataPrivacyOption')) {
+			if (!$plugin->getSetting(\PKP\core\PKPApplication::CONTEXT_ID_NONE, 'dataPrivacyOption')) {
 				list($countryCode, $cityName, $region) = $geoTool ? $geoTool->getGeoLocation($entryData['ip']) : array(null, null, null);
 				// Check optional columns setting.
-				$optionalColumns = $plugin->getSetting(CONTEXT_ID_NONE, 'optionalColumns');
+				$optionalColumns = $plugin->getSetting(\PKP\core\PKPApplication::CONTEXT_ID_NONE, 'optionalColumns');
 				if (!in_array(PKPStatisticsHelper::STATISTICS_DIMENSION_CITY, $optionalColumns)) $cityName = null;
 				if (!in_array(PKPStatisticsHelper::STATISTICS_DIMENSION_REGION, $optionalColumns)) $cityName = $region = null;
 			}
