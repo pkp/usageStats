@@ -16,6 +16,7 @@
 use PKP\scheduledTask\ScheduledTaskHelper;
 use PKP\statistics\PKPStatisticsHelper;
 use PKP\task\FileLoader;
+use APP\facades\Repo;
 
 /** These are rules defined by the COUNTER project.
  * See https://www.projectcounter.org/code-of-practice-sections/data-processing/#returncodesandtimefilters */
@@ -429,13 +430,10 @@ class UsageStatsLoader extends FileLoader {
 					$publicationId = (int) $args[2];
 				}
 				$submissionId = $args[0];
-				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
-				$submissionExists = $submissionDao->exists($submissionId);
+				$submissionExists = Repo::submission()->exists((int) $submissionId);
 				if ($submissionExists) {
-					if ($publicationId) {
-						$publicationDao = DAORegistry::getDAO('PublicationDAO'); /* @var $publicationDao PublicationDAO */
-						$publicationExists = $publicationDao->exists($publicationId, $submissionId);
-						if (!$publicationExists) break;
+					if ($publicationId && !Repo::publication()->existsInSubmission($publicationId, $submissionId)) {
+						break;
 					}
 					$assocId = $submissionId;
 					$assocTypeToReturn = $assocType;
@@ -487,8 +485,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
-				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
-				$submissionExists = $submissionDao->exists($submissionId);
+				$submissionExists =  Repo::submission()->exists((int) $submissionId);
 				if (!$submissionExists) break;
 
 				if (!isset($args[1])) break;
@@ -559,8 +556,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
-				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
-				$submissionExists = $submissionDao->exists($submissionId);
+				$submissionExists =  Repo::submission()->exists((int) $submissionId);
 				if (!$submissionExists) break;
 
 				if (!isset($args[1])) break;
@@ -611,8 +607,7 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_SUBMISSION_FILE:
 				if (!isset($args[0])) break;
 				$submissionId = $args[0];
-				$submissionDao = DAORegistry::getDAO('SubmissionDAO'); /* @var $submissionDao SubmissionDAO */
-				$submissionExists = $submissionDao->exists($submissionId);
+				$submissionExists =  Repo::submission()->exists((int) $submissionId);
 				if (!$submissionExists) break;
 
 				if (!isset($args[1])) break;
