@@ -511,10 +511,10 @@ class UsageStatsLoader extends FileLoader {
 			case ASSOC_TYPE_ISSUE_GALLEY:
 				if (!isset($args[0])) break;
 				$issueId = $args[0];
-				$issueDao = DAORegistry::getDAO('IssueDAO');
 				if (isset($this->_contextsByPath[current($contextPaths)])) {
 					$context =  $this->_contextsByPath[current($contextPaths)];
-					$issue = $issueDao->getById($issueId, $context->getId());
+					$issue = Repo::issue()->get($issueId);
+					$issue = $issue->getJournalId() == $context->getId() ? $issue : null;
 					if ($issue) {
 						$assocId = $issue->getId();
 					} else {
