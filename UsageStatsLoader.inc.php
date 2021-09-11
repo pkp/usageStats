@@ -13,6 +13,7 @@
  * @brief Scheduled task to extract transform and load usage statistics data into database.
  */
 
+use APP\facades\Repo;
 use PKP\scheduledTask\ScheduledTaskHelper;
 use PKP\statistics\PKPStatisticsHelper;
 use PKP\task\FileLoader;
@@ -317,7 +318,7 @@ class UsageStatsLoader extends FileLoader {
 		$file = null;
 		$type = null;
 		if ($assocType == ASSOC_TYPE_SUBMISSION_FILE || $assocType == ASSOC_TYPE_SUBMISSION_FILE_COUNTER_OTHER) {
-			$file = Services::get('submissionFile')->get($assocId);
+			$file = Repo::submissionFiles()->get($assocId);
 		}
 
 		if ($file) $type = $this->getFileTypeFromFile($file);
@@ -493,7 +494,7 @@ class UsageStatsLoader extends FileLoader {
 
 				if (!isset($args[2])) break;
 				$fileId = $args[2];
-				$articleFile = Services::get('submissionFile')->get($fileId);
+				$articleFile = Repo::submissionFiles()->get($fileId);
 				if (!$articleFile) break;
 
 				$assocId = $articleFile->getId();
@@ -564,7 +565,7 @@ class UsageStatsLoader extends FileLoader {
 
 				if (!isset($args[2])) break;
 				$fileId = $args[2];
-				$file = Services::get('submissionFile')->get($fileId);
+				$file = Repo::submissionFiles()->get($fileId);
 				if (!$file) break;
 				if ($file) {
 					$assocId = $file->getId();
@@ -615,7 +616,7 @@ class UsageStatsLoader extends FileLoader {
 
 				if (!isset($args[2])) break;
 				$fileId = $args[2];
-				$articleFile = Services::get('submissionFile')->get($fileId);
+				$articleFile = Repo::submissionFiles()->get($fileId);
 				if (!$articleFile) break;
 
 				$assocId = $articleFile->getId();
