@@ -330,7 +330,7 @@ class UsageStatsPlugin extends GenericPlugin {
 	 * @return bolean
 	 */
 	function callbackParseCronTab($hookName, $args) {
-		if ($this->getEnabled() || !Config::getVar('general', 'installed')) {
+		if ($this->getEnabled() || !Application::isInstalled()) {
 			$taskFilesPath =& $args[0]; // Reference needed.
 			$taskFilesPath[] = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'scheduledTasksAutoStage.xml';
 		}
@@ -790,7 +790,6 @@ class UsageStatsPlugin extends GenericPlugin {
 	*
 	* NB: This implementation was taken from OA-S directly. See
 	* http://sourceforge.net/p/openaccessstati/code-0/3/tree/trunk/logfile-parser/lib/logutils.php
-	* We just do not implement the PHP4 part as OJS dropped PHP4 support.
 	*
 	* @param $ip string
 	* @param $salt string
