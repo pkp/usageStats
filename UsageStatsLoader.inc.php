@@ -17,7 +17,6 @@ use APP\facades\Repo;
 use PKP\scheduledTask\ScheduledTaskHelper;
 use PKP\statistics\PKPStatisticsHelper;
 use PKP\task\FileLoader;
-use APP\facades\Repo;
 
 /** These are rules defined by the COUNTER project.
  * See https://www.projectcounter.org/code-of-practice-sections/data-processing/#returncodesandtimefilters */
