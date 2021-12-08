@@ -317,7 +317,7 @@ class UsageStatsLoader extends FileLoader {
 		$file = null;
 		$type = null;
 		if ($assocType == ASSOC_TYPE_SUBMISSION_FILE || $assocType == ASSOC_TYPE_SUBMISSION_FILE_COUNTER_OTHER) {
-			$file = Repo::submissionFiles()->get($assocId);
+			$file = Repo::submissionFile()->get($assocId);
 		}
 
 		if ($file) $type = $this->getFileTypeFromFile($file);
@@ -493,7 +493,7 @@ class UsageStatsLoader extends FileLoader {
 
 				if (!isset($args[2])) break;
 				$fileId = $args[2];
-				$articleFile = Repo::submissionFiles()->get($fileId);
+				$articleFile = Repo::submissionFile()->get($fileId);
 				if (!$articleFile) break;
 
 				$assocId = $articleFile->getId();
@@ -564,7 +564,7 @@ class UsageStatsLoader extends FileLoader {
 
 				if (!isset($args[2])) break;
 				$fileId = $args[2];
-				$file = Repo::submissionFiles()->get($fileId);
+				$file = Repo::submissionFile()->get($fileId);
 				if (!$file) break;
 				if ($file) {
 					$assocId = $file->getId();
@@ -615,7 +615,7 @@ class UsageStatsLoader extends FileLoader {
 
 				if (!isset($args[2])) break;
 				$fileId = $args[2];
-				$articleFile = Repo::submissionFiles()->get($fileId);
+				$articleFile = Repo::submissionFile()->get($fileId);
 				if (!$articleFile) break;
 
 				$assocId = $articleFile->getId();
