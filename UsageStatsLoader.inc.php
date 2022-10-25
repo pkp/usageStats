@@ -489,8 +489,19 @@ class UsageStatsLoader extends FileLoader {
 				$article = $submissionDao->getById($submissionId);
 				if (!$article) break;
 
-				if (!isset($args[2])) break;
-				$fileId = $args[2];
+				// consider this issue: https://github.com/pkp/pkp-lib/issues/6573
+				// apache log files contain URL download/submissionId/galleyId, i.e. without third argument
+				if (!isset($args[2])) {
+					if (!isset($args[1])) break;
+					$galleyId = $args[1];
+					$galleyDao = DAORegistry::getDAO('ArticleGalleyDAO');
+					$galley = $galleyDao->getById($galleyId);
+					if (!$galley) break;
+					$fileId = $galley->getData('submissionFileId');
+					if (!$fileId) break;
+				} else {
+					$fileId = $args[2];
+				}
 				$articleFile = Services::get('submissionFile')->get($fileId);
 				if (!$articleFile) break;
 
@@ -506,35 +517,40 @@ class UsageStatsLoader extends FileLoader {
 				}
 				break;
 			case ASSOC_TYPE_ISSUE:
-			case ASSOC_TYPE_ISSUE_GALLEY:
-				if (!isset($args[0])) break;
+				// consider issue https://github.com/pkp/pkp-lib/issues/6611
+				// apache log files contain both URLs for issue galley download:
+				// issue/view/issueId/galleyId (that should not be considered here), as well as
+				// issue/download/issueId/galleyId (that will be then considered below)
+				if (!isset($args[0]) || count($args) != 1) break;
 				$issueId = $args[0];
 				$issueDao = DAORegistry::getDAO('IssueDAO');
 				if (isset($this->_contextsByPath[current($contextPaths)])) {
 					$context =  $this->_contextsByPath[current($contextPaths)];
 					$issue = $issueDao->getById($issueId, $context->getId());
-					if ($issue) {
-						$assocId = $issue->getId();
-					} else {
-						break;
-					}
+					if (!$issue) break;
+					$assocId = $issue->getId();
+					$assocTypeToReturn = $assocType;
 				} else {
 					break;
 				}
-
-				$assocTypeToReturn = $assocType;
-				// Allows next case.
+				break;
 			case ASSOC_TYPE_ISSUE_GALLEY:
-				if (!isset($issue) || !isset($args[1])) break;
+				if (!isset($args[0]) || !isset($args[1])) break;
+				$issueId = $args[0];
+				$issueDao = DAORegistry::getDAO('IssueDAO');
+				if (isset($this->_contextsByPath[current($contextPaths)])) {
+					$context =  $this->_contextsByPath[current($contextPaths)];
+					$issue = $issueDao->getById($issueId, $context->getId());
+					if (!$issue) break;
+				} else {
+					break;
+				}
 				$issueGalleyId = $args[1];
 				$issueGalleyDao = DAORegistry::getDAO('IssueGalleyDAO');
 				$issueGalley = $issueGalleyDao->getById($issueGalleyId, $issue->getId());
-				if ($issueGalley) {
-					$assocId = $issueGalley->getId();
-				} else {
-					// Make sure we clean up values from the above case.
-					$assocId = $assocTypeToReturn = null;
-				}
+				if (!$issueGalley) break;
+				$assocId = $issueGalley->getId();
+				$assocTypeToReturn = $assocType;
 				break;
 		}
 		return array($assocId, $assocTypeToReturn);
@@ -605,8 +621,19 @@ class UsageStatsLoader extends FileLoader {
 				$article = $submissionDao->getById($submissionId);
 				if (!$article) break;
 
-				if (!isset($args[2])) break;
-				$fileId = $args[2];
+				// consider this issue: https://github.com/pkp/pkp-lib/issues/6573
+				// apache log files contain URL download/submissionId/galleyId, i.e. without third argument
+				if (!isset($args[2])) {
+					if (!isset($args[1])) break;
+					$galleyId = $args[1];
+					$galleyDao = DAORegistry::getDAO('ArticleGalleyDAO');
+					$galley = $galleyDao->getById($galleyId);
+					if (!$galley) break;
+					$fileId = $galley->getData('submissionFileId');
+					if (!$fileId) break;
+				} else {
+					$fileId = $args[2];
+				}
 				$articleFile = Services::get('submissionFile')->get($fileId);
 				if (!$articleFile) break;
 
