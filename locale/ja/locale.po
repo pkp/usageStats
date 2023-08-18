@@ -1,8 +1,9 @@
 # Bjorn-Ole Kamm <pkp_trans@b-ok.de>, 2022.
+# Osamu Komagata <komagata@niid.go.jp>, 2023.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-11-22 04:44+0000\n"
-"Last-Translator: Bjorn-Ole Kamm <pkp_trans@b-ok.de>\n"
+"PO-Revision-Date: 2023-08-19 07:58+0000\n"
+"Last-Translator: Osamu Komagata <komagata@niid.go.jp>\n"
 "Language-Team: Japanese <http://translate.pkp.sfu.ca/projects/plugins/"
 "usage-statistics-plugin/ja/>\n"
 "Language: ja\n"
@@ -17,3 +18,50 @@ msgstr "ダウンロード数"
 
 msgid "plugins.generic.usageStats.monthInitials"
 msgstr "1月 2月 3月 4月 5月 6月 7月 8月 9月 10月 11月 12月"
+
+msgid "plugins.generic.usageStats.settings.logging"
+msgstr "アクセスログ設定"
+
+msgid "plugins.generic.usageStats.settings.createLogFiles"
+msgstr "ログファイル作成"
+
+msgid "plugins.generic.usageStats.settings.logParseRegex"
+msgstr "ログファイルの正規表現"
+
+msgid "plugins.generic.usageStats.settings.saved"
+msgstr "使用統計プラグインの設定を保存"
+
+msgid "plugins.generic.usageStats.settings.dataPrivacyOption"
+msgstr "データ・プライバシー・オプション"
+
+msgid "plugins.generic.usageStats.settings.dataPrivacyOption.saltFilepath"
+msgstr "匿名化ソルトのファイルパス"
+
+msgid "plugins.generic.usageStats.settings.dataPrivacyOption.saltFilepath.invalid"
+msgstr "ソルトファイルは書き込みできません。"
+
+msgid "plugins.generic.usageStats.settings.createLogFiles.description"
+msgstr ""
+"このオプションを有効にすると、プラグインはfilesディレクトリ内にアクセスログフ"
+"ァイルを作成します。これらのファイルは使用統計データを抽出するために使用され"
+"ます。これ以上アクセスログファイルを作成したくない場合は、このオプションを無"
+"効にしたままにして、独自のサーバーログアクセスファイルを使用することができま"
+"す。"
+
+msgid "plugins.generic.usageStats.settings.logParseRegex.description"
+msgstr ""
+"デフォルトの正規表現は、結合された形式の apache のアクセスログファイルとプラ"
+"グインのログファイルを解析します。アクセスログファイルの形式が異なる場合は、"
+"それらをパースして期待する値を与えることができる正規表現を挿入する必要があり"
+"ます。詳細は UsageStatsLoader::_getDataFromLogEntry() を参照ください。"
+
+msgid "plugins.generic.usageStats.settings.dataPrivacyOption.requirements"
+msgstr ""
+"データのプライバシーを確保するためには、ウェブ・ユーザーが読み書き可能なファ"
+"イルに、ランダムに生成されたソルト値を指定する必要があります。 プライバシー保"
+"護のため、このファイルはバックアップしてはいけません。ソルトは、PHPのmcryptが"
+"必要な関数mcrypt_create_iv、PHPのopensslが必要な関数openssl_random_pseudo_byt"
+"es、*nixシステムでのみ動作するファイル/dev/urandom、暗号的に安全ではない関数m"
+"t_randのいずれかを使用してランダムに生成されます。したがって、Windowsサーバー"
+"を使用している場合は、暗号的に安全なソルトを生成するために、PHPのmcryptまたは"
+"opensslのいずれかを有効にしてインストールしてください。"
