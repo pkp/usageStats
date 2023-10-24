@@ -42,8 +42,13 @@ class UsageStatsHandler extends Handler {
 			}
 		}
 
-		$router = $request->getRouter(); /* @var $router PageRouter */
-		$privacyStatementUrl = $router->url($request, null, 'about', 'submissions');
+		$privacyStatementUrl = $request->getDispatcher()->url(
+			$request,
+			ROUTE_PAGE,
+			$request->getContext()->getPath(),
+			'about',
+			'privacy'
+		);
 
 		// Display the privacy info page.
 		$this->setupTemplate($request);
