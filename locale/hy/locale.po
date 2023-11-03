@@ -2,7 +2,7 @@
 # Tigran Zargaryan <tigran@flib.sci.am>, 2022, 2023.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-04-07 12:48+0000\n"
+"PO-Revision-Date: 2023-11-04 03:30+0000\n"
 "Last-Translator: Tigran Zargaryan <tigran@flib.sci.am>\n"
 "Language-Team: Armenian <http://translate.pkp.sfu.ca/projects/plugins/"
 "usage-statistics-plugin/hy/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13.1\n"
+"X-Generator: Weblate 4.18.2\n"
 
 msgid "plugins.generic.usageStats.optout.description.long.omp"
 msgstr ""
@@ -133,7 +133,7 @@ msgstr ""
 "կարդացեք <a href=\"{$privacyInfo}\">գաղտնիության տեղեկատվությունը</a>."
 
 msgid "plugins.generic.usageStats.optout.title"
-msgstr "Օգտագործման վիճակագրություն"
+msgstr "Օգտագործման վիճակագրության տեղեկատվություն"
 
 msgid "plugins.generic.usageStats.optout.description"
 msgstr "Օգտագործման վիճակագրություն Գաղտնիության տեղեկատվություն"
