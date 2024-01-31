@@ -690,9 +690,7 @@ class UsageStatsPlugin extends GenericPlugin {
 			if (!$this->validateSaltpath($saltFilename)) return false;
 			$currentDate = date("Ymd");
 			$saltFilenameLastModified = date("Ymd", filemtime($saltFilename));
-			$file = fopen($saltFilename, 'r');
-			$salt = trim(fread($file,filesize($saltFilename)));
-			fclose($file);
+			$salt = trim(file_get_contents($saltFilename));
 			if (empty($salt) || ($currentDate != $saltFilenameLastModified)) {
 				if(function_exists('mcrypt_create_iv')) {
 					$newSalt = bin2hex(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM|MCRYPT_RAND));
