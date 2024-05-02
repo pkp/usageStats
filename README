@@ -45,23 +45,41 @@ The only needed additional step depends on whether you want to have geo
 location data in your statistics or not. If that's the case, follow these
 steps:
 
-Linux:
-1 - open a shell prompt
-2 - go into OJS i.e. OMP installation’s base directory
-2 - wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
-3 - gunzip GeoLiteCity.dat.gz
-4 - mv GeoLiteCity.dat plugins/generic/usageStats
+
+Signup for Geolite2 Free Geolocation Data
+
+1 - You will need a free GeoLite2 account to download the GeoLite2 databases. 
+    For signing up, follow the instructions at 
+    https://dev.maxmind.com/geoip/geolite2-free-geolocation-data#accessing-geolite2-free-geolocation-data
+2 - For Linux, it is recommended to generate a license key, which can be used to automate
+    Geolite2 binary database downloads with the geoipupdate program
+
+Linux
+1 - Let your Linux administrator install the geoipupdate program using package manager of 
+    your Linux distribution. The geoipupdate program is usually stored in /usr/bin/geoipupdate
+2 - open a shell prompt
+3 - create a directory geoip outside of your OJS i.e. OMP installation’s base directory
+4 - obtain the GeoIP.conf file with your license key according to 
+    https://dev.maxmind.com/geoip/updating-databases/#2-obtain-geoipconf-with-account-information
+    and store it in your geoip directory created in step 4
+5 - give {ojs_root}/plugins/generic/usageStats write access for the apache user, e.g. 
+    chmod g+w {ojs_root}/plugins/generic/usageStats
+6 - /usr/bin/geoipupdate -v -f {geoip_directory}/GeoIP.conf -d {ojs_root}/plugins/generic/usageStats
+    This downloads the GeoLite2-ASN.mmdb, GeoLite2-City.mmdb and GeoLite2-Country.mmdb databases 
+    to your plugins/generic/usageStats directory
+7 - You may automate monthly updates of your Geolite2 databases using a cronjob. Add an entry to the 
+    cron table like this:
+    # Download GeoIP2 databases every month
+    30 7 1 * *	/usr/bin/geoipupdate -v -f {geoip_directory}/GeoIP.conf -d {ojs_root}/plugins/generic/usageStats 
+    In order that this works, give the apache user write permissions for the following files:
+    {ojs_root}/plugins/generic/usageStats/.geoipupdate.lock
+    {ojs_root}/plugins/generic/usageStats/GeoLite2-ASN.mmdb
+    {ojs_root}/plugins/generic/usageStats/GeoLite2-City.mmdb
+    {ojs_root}/plugins/generic/usageStats/GeoLite2-Country.mmdb
+
 
 Windows
-1 - download the file http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
-2 - decompress it using any decompression tool into plugins/generic/usageStats directory
-
-In both cases the complete path to the installed database file should be
-plugins/generic/usageStats/GeoLiteCity.dat
-
-Note, that a separate license agreement is required for this use of this database. 
-For details, see:
-	https://dev.maxmind.com/geoip/legacy/geolite/
+(add steps here)
 
 
 Management

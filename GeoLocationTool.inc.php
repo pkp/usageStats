@@ -13,8 +13,8 @@
  * @brief Geo location by ip wrapper class.
  */
 
-/** GeoIp tool for geo location based on ip */
-include('lib' . DIRECTORY_SEPARATOR . 'geoIp' . DIRECTORY_SEPARATOR . 'geoipcity.inc');
+require_once 'vendor/autoload.php';
+use GeoIp2\Database\Reader;
 
 class GeoLocationTool {
 
@@ -30,10 +30,10 @@ class GeoLocationTool {
 	 * Use the method isPresent() to check if the database file is present before use.
 	 */
 	function __construct() {
-		$geoLocationDbFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . "GeoLiteCity.dat";
+		$geoLocationDbFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . "GeoLite2-City.mmdb";
 		if (file_exists($geoLocationDbFile)) {
 			$isDbFilePresent = true;
-			$this->_geoLocationTool = geoip_open($geoLocationDbFile, GEOIP_STANDARD);
+			$this->_geoLocationTool = new Reader($geoLocationDbFile);
 			include('lib' . DIRECTORY_SEPARATOR . 'geoIp' . DIRECTORY_SEPARATOR . 'geoipregionvars.php');
 			$this->_regionName = $GEOIP_REGION_NAME;
 		} else {
@@ -64,21 +64,19 @@ class GeoLocationTool {
 		// If no geolocation tool, the geo database file is missing.
 		if (!$this->_geoLocationTool) return array(null, null, null);
 
-		$record = geoip_record_by_addr($this->_geoLocationTool, $ip);
-
-		if (!$record) {
+		try {
+			$record = $this->_geoLocationTool->city($ip);
+		} catch (GeoIp2\Exception\AddressNotFoundException $e) {
 			return array(null, null, null);
 		}
-
-		$regionName = null;
-		if(isset($this->_regionName[$record->country_code][$record->region])) {
-			$regionName = $this->_regionName[$record->country_code][$record->region];
-		}
+		
+		$regionIsoCode = $record->mostSpecificSubdivision->isoCode;
+		if (strlen($regionIsoCode) > 2) $regionIsoCode = '';
 
 		return array(
-			$record->country_code,
-			utf8_encode($record->city),
-			$record->region
+			$record->country->isoCode,
+			utf8_encode($record->city->name),
+			$regionIsoCode
 		);
 	}
 
@@ -89,8 +87,34 @@ class GeoLocationTool {
 	function getAllCountryCodes() {
 		if (!$this->_geoLocationTool) return null;
 
-		$tool = $this->_geoLocationTool;
-		$countryCodes = $tool->GEOIP_COUNTRY_CODES;
+		$countryCodes = array(
+			"","AP","EU","AD","AE","AF","AG","AI","AL","AM","CW",
+			"AO","AQ","AR","AS","AT","AU","AW","AZ","BA","BB",
+			"BD","BE","BF","BG","BH","BI","BJ","BM","BN","BO",
+			"BR","BS","BT","BV","BW","BY","BZ","CA","CC","CD",
+			"CF","CG","CH","CI","CK","CL","CM","CN","CO","CR",
+			"CU","CV","CX","CY","CZ","DE","DJ","DK","DM","DO",
+			"DZ","EC","EE","EG","EH","ER","ES","ET","FI","FJ",
+			"FK","FM","FO","FR","SX","GA","GB","GD","GE","GF",
+			"GH","GI","GL","GM","GN","GP","GQ","GR","GS","GT",
+			"GU","GW","GY","HK","HM","HN","HR","HT","HU","ID",
+			"IE","IL","IN","IO","IQ","IR","IS","IT","JM","JO",
+			"JP","KE","KG","KH","KI","KM","KN","KP","KR","KW",
+			"KY","KZ","LA","LB","LC","LI","LK","LR","LS","LT",
+			"LU","LV","LY","MA","MC","MD","MG","MH","MK","ML",
+			"MM","MN","MO","MP","MQ","MR","MS","MT","MU","MV",
+			"MW","MX","MY","MZ","NA","NC","NE","NF","NG","NI",
+			"NL","NO","NP","NR","NU","NZ","OM","PA","PE","PF",
+			"PG","PH","PK","PL","PM","PN","PR","PS","PT","PW",
+			"PY","QA","RE","RO","RU","RW","SA","SB","SC","SD",
+			"SE","SG","SH","SI","SJ","SK","SL","SM","SN","SO",
+			"SR","ST","SV","SY","SZ","TC","TD","TF","TG","TH",
+			"TJ","TK","TM","TN","TO","TL","TR","TT","TV","TW",
+			"TZ","UA","UG","UM","US","UY","UZ","VA","VC","VE",
+			"VG","VI","VN","VU","WF","WS","YE","YT","RS","ZA",
+			"ZM","ME","ZW","A1","A2","O1","AX","GG","IM","JE",
+			"BL","MF", "BQ"
+		);
 
 		// Overwrite the first empty record with the code to
 		// unknow country.
@@ -98,25 +122,6 @@ class GeoLocationTool {
 		return $countryCodes;
 	}
 
-	/**
-	 * Return the 3 letters version of country codes
-	 * based on the passed 2 letters version.
-	 * @param $countryCode string
-	 * @return mixed string or null
-	 */
-	function get3LettersCountryCode($countryCode) {
-		return $this->_getCountryCodeOnList($countryCode, 'GEOIP_COUNTRY_CODES3');
-	}
-
-	/**
-	 * Return the 2 letter version of country codes
-	 * based on the passed 3 letters version.
-	 * @param $countryCode3 string
-	 * @return mixed string or null
-	 */
-	function get2LettersCountryCode($countryCode3) {
-		return $this->_getCountryCodeOnList($countryCode3, 'GEOIP_COUNTRY_CODES');
-	}
 
 	/**
 	 * Get regions by country.
@@ -131,42 +136,6 @@ class GeoLocationTool {
 		}
 
 		return $regions;
-	}
-
-	/**
-	 * Get the passed country code inside the passed
-	 * list.
-	 * @param $countryCode The 2 letters country code.
-	 * @param $countryCodeList array Any geoip country
-	 * code list.
-	 * @return mixed String or null.
-	 */
-	function _getCountryCodeOnList($countryCode, $countryCodeListName) {
-		$returner = null;
-
-		if (!$this->_geoLocationTool) return $returner;
-		$tool = $this->_geoLocationTool;
-
-		if (isset($tool->$countryCodeListName)) {
-			$countryCodeList = $tool->$countryCodeListName;
-		} else {
-			return $returner;
-		}
-
-		$countryCodesIndex = $tool->GEOIP_COUNTRY_CODE_TO_NUMBER;
-		$countryCodeIndex = null;
-
-		if (isset($countryCodesIndex[$countryCode])) {
-			$countryCodeIndex = $countryCodesIndex[$countryCode];
-		}
-
-		if ($countryCodeIndex) {
-			if (isset($countryCodeList[$countryCodeIndex])) {
-				$returner = $countryCodeList[$countryCodeIndex];
-			}
-		}
-
-		return $returner;
 	}
 }
 
