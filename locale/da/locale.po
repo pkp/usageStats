@@ -1,11 +1,12 @@
 # Alexandra Fogtmann-Schulz <alfo@kb.dk>, 2022, 2023.
+# "Jesper B. Thestrup" <jbt@kb.dk>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-28T15:19:55-08:00\n"
-"PO-Revision-Date: 2023-05-18 02:06+0000\n"
-"Last-Translator: Alexandra Fogtmann-Schulz <alfo@kb.dk>\n"
+"PO-Revision-Date: 2024-11-16 08:40+0000\n"
+"Last-Translator: \"Jesper B. Thestrup\" <jbt@kb.dk>\n"
 "Language-Team: Danish <http://translate.pkp.sfu.ca/projects/plugins/"
 "usage-statistics-plugin/da/>\n"
 "Language: da\n"
@@ -13,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1\n"
+"X-Generator: Weblate 4.18.2\n"
 
 msgid "plugins.generic.usageStats.settings.logging"
 msgstr "Adgangslog-muligheder"
@@ -193,7 +194,7 @@ msgid "plugins.generic.usageStats.optout.description"
 msgstr "Brugsstatistiks oplysninger om beskyttelse af personlige oplysninger"
 
 msgid "plugins.generic.usageStats.optout.title"
-msgstr "Brugsstatistiks oplysninger om beskyttelse af personlige oplysninger"
+msgstr "Brugsstatistiks oplysninger"
 
 msgid "plugins.generic.usageStats.optout.shortDesc"
 msgstr ""
