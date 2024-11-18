@@ -1,14 +1,14 @@
-# Cyril Kamburov <cc@intermedia.bg>, 2022.
+# Cyril Kamburov <cc@intermedia.bg>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-28T15:19:55-08:00\n"
-"PO-Revision-Date: 2022-08-18 18:33+0000\n"
+"PO-Revision-Date: 2023-02-27 16:48+0000\n"
 "Last-Translator: Cyril Kamburov <cc@intermedia.bg>\n"
 "Language-Team: Bulgarian <http://translate.pkp.sfu.ca/projects/plugins/"
-"usage-statistics-plugin/bg_BG/>\n"
-"Language: bg_BG\n"
+"usage-statistics-plugin/bg/>\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -171,7 +171,7 @@ msgid "plugins.generic.usageStats.statsSum"
 msgstr "Сумиране на всички тегления"
 
 msgid "plugins.generic.usageStats.noStats"
-msgstr "Данни за теглене още не са налични."
+msgstr "Данните за изтегляне все още не са налични."
 
 msgid "plugins.generic.usageStats.monthInitials"
 msgstr "яну фев мар апр май юни юли авг сеп окт ное дек"

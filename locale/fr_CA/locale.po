@@ -1,10 +1,10 @@
-# Marie-Hélène Vézina [UdeMontréal] <marie-helene.vezina@umontreal.ca>, 2022.
+# Marie-Hélène Vézina [UdeMontréal] <marie-helene.vezina@umontreal.ca>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-28T15:19:55-08:00\n"
-"PO-Revision-Date: 2022-10-01 22:01+0000\n"
+"PO-Revision-Date: 2023-04-24 10:30+0000\n"
 "Last-Translator: Marie-Hélène Vézina [UdeMontréal] <marie-helene."
 "vezina@umontreal.ca>\n"
 "Language-Team: French (Canada) <http://translate.pkp.sfu.ca/projects/plugins/"
@@ -266,7 +266,7 @@ msgid "plugins.generic.usageStats.noStats"
 msgstr "Les données relatives au téléchargement ne sont pas encore disponibles."
 
 msgid "plugins.generic.usageStats.monthInitials"
-msgstr "Jan Fév Mar Avr Mai Juin Juil Aoû Sep Oct Nov Déc"
+msgstr "Jan. Fév. Mar. Avr. Mai Juin Juil. Août Sept. Oct. Nov. Déc."
 
 msgid "plugins.generic.usageStats.downloads"
 msgstr "Téléchargements"
