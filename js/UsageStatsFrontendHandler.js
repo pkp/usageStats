@@ -15,7 +15,7 @@
 		return;
 	}
 
-	var graphs, noStatsNotice; 
+	var graphs, noStatsNotice;
 
 	// Check for .querySelectorAll in browser support
 	try {
@@ -75,6 +75,9 @@
 				gridLines: {
 					color: 'rgba(0,0,0,0.05)',
 					drawTicks: false,
+				},
+				ticks: {
+					beginAtZero: true
 				},
 			}],
 		},
